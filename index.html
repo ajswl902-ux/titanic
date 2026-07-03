@@ -1,119 +1,124 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>타이타닉 최종 통합 대시보드</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;900&display=swap');
-        body { font-family: 'Pretendard', sans-serif; background: #0f172a; }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        @keyframes wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        .waterline { animation: wave 3s ease-in-out infinite; }
-        @media print { .no-print { display: none; } }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    body {background-color: #030712}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb; min-height: 14.0px}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb}
+    p.p4 {margin: 0.0px 0.0px 12.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85)}
+    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #f6f9fb; -webkit-text-stroke: #000000; background-color: #ffffff}
+    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #f6f9fb; -webkit-text-stroke: #000000; min-height: 13.0px}
+    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Apple SD Gothic Neo'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85)}
+    span.s1 {font-kerning: none}
+    span.s2 {font: 11.0px 'Apple SD Gothic Neo'; font-kerning: none; background-color: #b3b3b3}
+    span.s3 {font-kerning: none; background-color: #b3b3b3}
+    span.s4 {font: 11.0px '.Apple Color Emoji UI'; font-kerning: none; background-color: #b3b3b3}
+    span.s5 {font: 11.0px AppleMyungjo; font-kerning: none}
+    span.s6 {font: 11.0px Times; font-kerning: none}
+    span.s7 {font-kerning: none; background-color: #ffffff}
+    span.s8 {font: 11.0px 'Helvetica Neue'; font-kerning: none; background-color: #b3b3b3}
+  </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-4xl mx-auto space-y-8">
-        <!-- 상단: 인터랙티브 분석 대시보드 -->
-        <div class="glass-card p-8 rounded-3xl shadow-2xl">
-            <h1 class="text-3xl font-black text-slate-900 text-center mb-2">타이타닉 생존자 분석 대시보드</h1>
-            <div class="waterline text-center text-blue-500 mb-6">~~~~~~ 🌊 ~~~~~~</div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                    <h2 class="font-bold text-slate-700 mb-4">성별 생존 비율</h2>
-                    <canvas id="survivalChart"></canvas>
-                </div>
-                <div class="space-y-4">
-                    <div class="p-6 bg-amber-50 border border-amber-200 rounded-2xl">
-                        <h3 class="font-bold text-amber-900">생존 핵심 통계</h3>
-                        <p class="text-sm text-amber-800 leading-relaxed">여성 승객은 남성보다 압도적으로 높은 생존 확률을 보였으며, 이는 당시 구조 정책의 핵심 요인이었습니다.</p>
-                    </div>
-                    <div class="p-6 bg-blue-50 border border-blue-200 rounded-2xl">
-                        <h3 class="font-bold text-blue-900">계급과 운명</h3>
-                        <p class="text-sm text-blue-800 leading-relaxed">1등석 승객은 3등석 승객에 비해 구조 우선순위가 높았으며, 이는 생존율 통계에서 뚜렷하게 나타납니다.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 하단: 개인별 운명 예측 -->
-        <div class="glass-card p-8 rounded-3xl shadow-2xl border border-blue-200">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">개인별 운명 예측기</h2>
-            <form id="predictionForm" class="space-y-4 no-print">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <select id="sex" class="p-4 bg-slate-50 border rounded-2xl">
-                        <option value="1">남성</option>
-                        <option value="0">여성</option>
-                    </select>
-                    <select id="pclass" class="p-4 bg-slate-50 border rounded-2xl">
-                        <option value="1">1등석</option>
-                        <option value="2">2등석</option>
-                        <option value="3">3등석</option>
-                    </select>
-                    <input type="number" id="age" value="25" class="p-4 bg-slate-50 border rounded-2xl" placeholder="나이">
-                </div>
-                <button type="button" onclick="predict()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold hover:bg-slate-800 transition">예측 실행</button>
-            </form>
-
-            <div id="result" class="mt-6 p-4 rounded-2xl hidden text-center font-bold text-lg"></div>
-            <div id="geminiSection" class="mt-6 hidden">
-                <button type="button" onclick="generateStory()" class="w-full bg-amber-600 text-white p-4 rounded-2xl font-bold hover:bg-amber-700 transition">✨ Gemini가 들려주는 당시의 순간</button>
-                <div id="storyResult" class="mt-4 p-6 bg-slate-100 rounded-2xl text-sm italic text-slate-700 leading-relaxed"></div>
-                <button type="button" onclick="window.print()" class="w-full mt-4 bg-blue-600 text-white p-4 rounded-2xl font-bold no-print hover:bg-blue-700">📄 보고서 PDF 다운로드</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const apiKey = ""; 
-
-        function initializeChart() {
-            const ctx = document.getElementById('survivalChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: { labels: ['여성 생존', '남성 생존'], datasets: [{ data: [74, 26], backgroundColor: ['#10b981', '#3b82f6'] }] }
-            });
-        }
-
-        function predict() {
-            const sex = parseInt(document.getElementById('sex').value);
-            const pclass = parseInt(document.getElementById('pclass').value);
-            const age = parseInt(document.getElementById('age').value);
-            let survived = (sex === 0) ? (pclass !== 3 || age <= 30) : (pclass === 1 && age < 40);
-
-            const resultDiv = document.getElementById('result');
-            resultDiv.classList.remove('hidden');
-            resultDiv.textContent = survived ? "생존 가능성이 매우 높습니다." : "생존 가능성이 낮습니다.";
-            resultDiv.className = `mt-6 p-4 rounded-2xl text-center font-bold ${survived ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`;
-            document.getElementById('geminiSection').classList.remove('hidden');
-        }
-
-        async function generateStory() {
-            const storyDiv = document.getElementById('storyResult');
-            storyDiv.textContent = "📜 기록을 검색하는 중...";
-            const sex = document.getElementById('sex').options[document.getElementById('sex').selectedIndex].text;
-            const pclass = document.getElementById('pclass').options[document.getElementById('pclass').selectedIndex].text;
-            const age = document.getElementById('age').value;
-            const resultText = document.getElementById('result').textContent;
-            
-            const prompt = `타이타닉호 승객 정보: 성별 ${sex}, ${pclass}, ${age}세. 결과: ${resultText}. 당시 상황을 몰입감 있는 1인칭 소설로 짧게 써줘.`;
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                const data = await response.json();
-                storyDiv.textContent = data.candidates[0].content.parts[0].text;
-            } catch (e) { storyDiv.textContent = "오류 발생."; }
-        }
-
-        window.onload = initializeChart;
-    </script>
+<body>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1">타이타닉 최종 데이터 시각화 &amp; 시뮬레이션</span></p>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">🚢 타이타닉 생존 요인 인터랙티브 분석 &amp; 운명 예측 대시보드</span></h1>
+<p class="p4"><span class="s1">객실 등급별 실시간 위치 시각화, 통계 분석, 그리고 조건별 승객 운명을 정밀 분석하고 최종 리포트를 인쇄 및 저장할 수 있습니다.</span></p>
+<p class="p2"><span class="s1">생존자 (Survived)</span></p>
+<p class="p2"><span class="s1">사망자 (Deceased)</span></p>
+<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">📊 1. 등급별 생존 통계 대시보드</span></h2>
+<p class="p4"><span class="s1">조회할 객실 등급을 선택하거나 선체 도면 구역을 클릭하면 실시간으로 성비 및 생존율 대조 데이터가 연동됩니다.</span></p>
+<p class="p2"><span class="s1">실시간 연동 적용됨</span></p>
+<p class="p6"><span class="s2">전체</span><span class="s3"> </span><span class="s2">탑승객</span><span class="s3"> (ALL) </span><span class="s4">🥇</span><span class="s3"> 1</span><span class="s2">등석</span><span class="s3"> </span><span class="s2">승객</span><span class="s3"> </span><span class="s4">🥈</span><span class="s3"> 2</span><span class="s2">등석</span><span class="s3"> </span><span class="s2">승객</span><span class="s3"> </span><span class="s4">🥉</span><span class="s3"> 3</span><span class="s2">등석</span><span class="s3"> </span><span class="s2">승객</span></p>
+<p class="p2"><span class="s1">선택 등급 탑승 인원</span></p>
+<p class="p2"><span class="s1">891 명</span></p>
+<p class="p2"><span class="s1">최종 생존율</span></p>
+<p class="p2"><span class="s1">38.4 %</span></p>
+<p class="p2"><span class="s1">생존자 / 사망자 수 구성 342명 생존 / 549명 사망</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1">탑승 성별 구성 (여성 / 남성) 여성 314명 (35.2%)</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"></span><br></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">그룹별 실제 생존 및 사망 정밀 대조</span></h3>
+<p class="p4"><span class="s1">성별에 따른 생존 및 사망 분포 격차입니다.</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">📍 2. 선체 수직적 구조 &amp; 객실 등급별 배치도</span></h2>
+<p class="p4"><span class="s1">선박 내 구역을 직접 선택하면 상단의 분석 보고서 대시보드가 실시간으로 필터링되어 입체적인 확인이 가능합니다.</span></p>
+<p class="p2"><span class="s1">구역 클릭 연계 지원</span></p>
+<p class="p2"><span class="s1">🚣 구명보트 배치 구역 (BOAT DECK)</span></p>
+<p class="p2"><span class="s1">🥇 1등석 구역 (A ~ C Deck - 상갑판)</span></p>
+<p class="p2"><span class="s1">⚡ 구명보트 최단 거리 이동 및 신속 탈출 동선 확보 구역</span></p>
+<p class="p2"><span class="s1">🥈 2등석 구역 (D ~ E Deck - 중간층)</span></p>
+<p class="p2"><span class="s1">🚪 중간 진입 대피 통로 배정 및 일반 구조 범위</span></p>
+<p class="p2"><span class="s1">🥉 3등석 구역 (F ~ G Deck - 하부선체)</span></p>
+<p class="p2"><span class="s1">⚠️ 침수 최인접 구역 • 길고 좁은 미로형 대피 계단으로 인한 피해 가중</span></p>
+<p class="p2"><span class="s1">TITANIC DOUBLE HULL BASE</span></p>
+<p class="p2"><span class="s1">해수면 (Waterline) 🌊</span></p>
+<p class="p4"><span class="s1">💡 구조와 통로의 물리적 위치 한계</span></p>
+<p class="p4"><span class="s1">상부 갑판과 인접한 최상류층인 1등석 탑승객들은 사고 직후 발생한 긴급 구조 방송 전달 및 탈출 보트 접근성이 매우 우수했습니다. 그러나 기계 장비실과 선박 가장 저지대에 밀접했던 3등석 승객들은 복잡한 하부 미로 통로의 병목 현상과 차단 벽 등 대피가 원천적으로 지연되는 수많은 사회·물리적 차별 조건에 노출되었습니다.</span></p>
+<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">👨‍👩‍👧‍👦 3. 동반 가족 수에 따른 실제 통계 분석</span></h2>
+<p class="p4"><span class="s1">가족 동반 여부 및 규모에 따라 탈출 골든타임의 대응 속도가 크게 상이함을 검증한 지표입니다.</span></p>
+<p class="p2"><span class="s1">🚶</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">혼자 탑승 (Solo)</span></h3>
+<p class="p4"><span class="s1">동반 가족 수: 0명</span></p>
+<p class="p2"><span class="s1">실제 생존 확률 약 30.2%</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p4"><span class="s1">동행자가 부재하여 긴급 비상 상황 발생 정보를 서로 즉시 알리거나 협력해 신속히 탈출로를 구축하기에 통계적으로 다소 취약했습니다.</span></p>
+<p class="p2"><span class="s1">생존 최고 지표</span></p>
+<p class="p2"><span class="s1">👨‍👩‍</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">소형 가족 규모 (1 ~ 3명)</span></h3>
+<p class="p4"><span class="s1">동반 가족 수: 1 ~ 3명</span></p>
+<p class="p2"><span class="s1">실제 생존 확률 약 57.8%</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p4"><span class="s1">위기 속에서 이성적인 지휘와 보정 역할을 할 동행자가 존재함과 동시에 기동성에 아무런 물리적 장애를 주지 않아 최상의 생존율을 보였습니다.</span></p>
+<p class="p2"><span class="s1">👨‍👩‍👧‍👦</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">대형 가족 그룹 (4명 이상)</span></h3>
+<p class="p4"><span class="s1">동반 가족 수: 4명 이상</span></p>
+<p class="p2"><span class="s1">실제 생존 확률 약 15.0%</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p4"><span class="s1">혼란스러운 아수라장 상황에서 분실된 모든 구성원들을 모두 찾아 집결하고 재결합하는 고도의 기회비용 소요로 가장 구조 시기를 놓쳤습니다.</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1">SOCIO-HISTORICAL REPORT</span></p>
+<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">👑 사회적 우선순위 구조의 증명: '1등석 여성' 정밀 보고서</span></h2>
+<p class="p4"><span class="s1">전체 탑승 승객 그룹 중 단 3명의 사망자를 제외한 전원이 생존한 절대적인 사회 우위층의 원인 분석입니다.</span></p>
+<p class="p2"><span class="s1">👩📊</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">1등석 여성 정량적 생존 현황</span></h3>
+<p class="p4"><span class="s1">1st Class Female Passengers</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1">생존 91명 (96.8%) 사망 3명 (3.2%)</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">🕵️ 역사 데이터가 보여주는 생존 특권 요인 세부 분석</span></h4>
+<p class="p2"><span class="s1">LOCATION</span></p>
+<h5 style="margin: 0.0px 0.0px 16.6px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">최상층 구조물 인접</span></h5>
+<p class="p4"><span class="s1">탈출 및 구조 보트 배치가 진행되는 최상단 갑판 구역으로 즉각 이탈할 수 있는 동선 특혜를 가졌습니다.</span></p>
+<p class="p2"><span class="s1">GENTLEMANSHIP</span></p>
+<h5 style="margin: 0.0px 0.0px 16.6px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">여성·아동 우선 원칙</span></h5>
+<p class="p4"><span class="s1">당시 해양 수칙의 가장 중요한 규범인 약자 우선 구제 방침이 1등석의 사회적 영향력과 결합되었습니다.</span></p>
+<p class="p2"><span class="s1">MINORITY COMPANION</span></p>
+<h5 style="margin: 0.0px 0.0px 16.6px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">단조로운 탑승 인원</span></h5>
+<p class="p4"><span class="s1">가족 구성원이 분산될 위험이 거의 없어 비상 위협에 유연하고 가벼운 의사결정이 가능했습니다.</span></p>
+<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; color: #f6f9fb; -webkit-text-stroke: #f6f9fb"><span class="s1">🔮 개인별 역사적 운명 예측 시뮬레이터</span></h2>
+<p class="p4"><span class="s1">실제 역사 통계 데이터를 기반으로 한 회귀 계산 알고리즘을 통해 당신의 탈출 조건별 생존 예측률을 확인해 보세요.</span></p>
+<p class="p2"><span class="s1">성별</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s5">여성</span><span class="s6"> (Female)</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s5">남성</span><span class="s6"> (Male)</span></p>
+<p class="p11"><span class="s7"><span class="Apple-converted-space">                        </span></span></p>
+<p class="p2"><span class="s1">객실 등급</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s6">1</span><span class="s5">등석</span><span class="s6"> (First Class)</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s6">2</span><span class="s5">등석</span><span class="s6"> (Second Class)</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s6">3</span><span class="s5">등석</span><span class="s6"> (Third Class)</span></p>
+<p class="p11"><span class="s7"><span class="Apple-converted-space">                        </span></span></p>
+<p class="p2"><span class="s1">나이</span></p>
+<p class="p2"><span class="s1">동반 가족 수</span></p>
+<p class="p12"><span class="s4">📊</span><span class="s8"> </span><span class="s3">예측</span><span class="s8"> </span><span class="s3">모델</span><span class="s8"> </span><span class="s3">및</span><span class="s8"> </span><span class="s3">생존율</span><span class="s8"> </span><span class="s3">계산</span><span class="s8"> </span><span class="s3">실행</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p12"><span class="s4">📄</span><span class="s8"> </span><span class="s3">최종</span><span class="s8"> </span><span class="s3">분석</span><span class="s8"> </span><span class="s3">보고서</span><span class="s8"> PDF </span><span class="s3">인쇄</span><span class="s8"> / </span><span class="s3">다운로드</span></p>
 </body>
 </html>
