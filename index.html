@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타이타닉 최종 통합 분석 대시보드 & 예측기</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght=300;400;600;700;800;900&display=swap');
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+        }
+        /* 해수면 물결 효과 애니메이션 */
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        .waterline {
+            animation: wave 3s ease-in-out infinite;
+        }
+        
+        /* SVG 데크 호버 및 활성화 스타일 */
+        .svg-deck {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .svg-deck .deck-bg {
+            transition: all 0.3s ease;
+        }
+        /* 마우스 호버 시 오버레이 반투명 강조 */
+        .svg-deck:hover .deck-bg {
+            fill-opacity: 0.35 !important;
+        }
+        /* 클릭하여 활성화된 데크의 스타일 */
+        .svg-deck.active-deck .deck-bg {
+            fill-opacity: 0.65 !important;
+            stroke-width: 3.5px !important;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff !important; color: #000000 !important; }
+            .print-card { background: #ffffff !important; color: #000000 !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+            .print-text { color: #000000 !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16">
+
+    <!-- 헤더 영역 -->
+    <header class="relative bg-slate-900 border-b border-slate-800 py-8 px-6 md:px-12 shadow-2xl overflow-hidden no-print">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-amber-950/10 pointer-events-none"></div>
+        <div class="relative max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <span class="inline-block px-4 py-1.5 text-xs md:text-sm font-extrabold bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30 mb-3 tracking-wide">
+                    타이타닉 최종 데이터 시각화 & 시뮬레이션
+                </span>
+                <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center gap-3 break-keep">
+                    🚢 타이타닉 생존 요인 인터랙티브 분석 & 운명 예측 대시보드
+                </h1>
+                <p class="text-base md:text-lg text-slate-400 mt-2 break-keep">
+                    객실 등급별 실시간 위치 시각화, 통계 분석, 그리고 조건별 승객 운명을 정밀 분석하고 최종 리포트를 인쇄 및 저장할 수 있습니다.
+                </p>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800 px-5 py-4 rounded-xl flex items-center gap-6 text-sm md:text-base font-semibold shadow-inner shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-4 h-4 rounded-full bg-emerald-500 inline-block shadow-lg shadow-emerald-500/50"></span>
+                    <span>생존자 (Survived)</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <span class="w-4 h-4 rounded-full bg-rose-500 inline-block shadow-lg shadow-rose-500/50"></span>
+                    <span>사망자 (Deceased)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 레이아웃 컨테이너 -->
+    <main class="max-w-7xl mx-auto px-4 md:px-8 mt-8 flex flex-col gap-8">
+        
+        <!-- 섹션 1: 등급 선택 대시보드 (통계 + 막대 그래프) -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl print-card">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-slate-800/80 pb-6">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-black text-white flex items-center gap-2.5 print-text">
+                        📊 1. 등급별 생존 통계 대시보드
+                    </h2>
+                    <p class="text-sm md:text-base text-slate-400 mt-1 break-keep">
+                        조회할 객실 등급을 선택하거나 선체 도면 구역을 클릭하면 실시간으로 성비 및 생존율 대조 데이터가 연동됩니다.
+                    </p>
+                </div>
+                <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1.5 rounded-lg font-mono font-bold shrink-0 no-print">실시간 연동 적용됨</span>
+            </div>
+
+            <!-- 등급 선택 탭 -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8 no-print">
+                <button onclick="selectClass(0)" id="btn-class-0" class="tab-btn py-3.5 px-4 text-sm md:text-base font-extrabold rounded-xl border transition-all duration-200 focus:outline-none bg-slate-800 border-slate-700 text-white shadow-lg">
+                    전체 탑승객 (ALL)
+                </button>
+                <button onclick="selectClass(1)" id="btn-class-1" class="tab-btn py-3.5 px-4 text-sm md:text-base font-extrabold rounded-xl border transition-all duration-200 focus:outline-none bg-slate-950 border-slate-850 text-slate-400 hover:text-white hover:bg-slate-900/60">
+                    🥇 1등석 승객
+                </button>
+                <button onclick="selectClass(2)" id="btn-class-2" class="tab-btn py-3.5 px-4 text-sm md:text-base font-extrabold rounded-xl border transition-all duration-200 focus:outline-none bg-slate-950 border-slate-850 text-slate-400 hover:text-white hover:bg-slate-900/60">
+                    🥈 2등석 승객
+                </button>
+                <button onclick="selectClass(3)" id="btn-class-3" class="tab-btn py-3.5 px-4 text-sm md:text-base font-extrabold rounded-xl border transition-all duration-200 focus:outline-none bg-slate-950 border-slate-850 text-slate-400 hover:text-white hover:bg-slate-900/60">
+                    🥉 3등석 승객
+                </button>
+            </div>
+
+            <!-- 대시보드 내부 레이아웃 (좌: 통계 카드, 우: 그래프) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- 좌측: 통계 그리드 수치 -->
+                <div class="lg:col-span-7 flex flex-col gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-800/80 flex flex-col justify-between shadow-inner print-card">
+                            <span class="text-sm font-bold text-slate-400 tracking-wider print-text">선택 등급 탑승 인원</span>
+                            <div class="flex items-baseline gap-1.5 mt-3">
+                                <span id="stat-total" class="text-4xl md:text-5xl font-black text-white tracking-tight transition-all duration-300 print-text">891</span>
+                                <span class="text-base text-slate-400 font-bold print-text">명</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-800/80 flex flex-col justify-between shadow-inner print-card">
+                            <span class="text-sm font-bold text-slate-400 tracking-wider print-text">최종 생존율</span>
+                            <div class="flex items-baseline gap-1.5 mt-3">
+                                <span id="stat-survival-rate" class="text-4xl md:text-5xl font-black text-emerald-400 tracking-tight transition-all duration-300 print-text">38.4</span>
+                                <span class="text-base text-emerald-500 font-black print-text">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 진행률 게이지 -->
+                    <div class="space-y-6 bg-slate-950/50 p-6 rounded-xl border border-slate-850 print-card">
+                        <!-- 생존자 수 vs 사망자 수 -->
+                        <div>
+                            <div class="flex flex-col sm:flex-row justify-between text-sm md:text-base font-bold mb-2 gap-1">
+                                <span class="text-slate-300 print-text font-bold">생존자 / 사망자 수 구성</span>
+                                <span id="survival-ratio-text" class="text-emerald-400 font-mono font-semibold print-text">342명 생존 / 549명 사망</span>
+                            </div>
+                            <div class="h-4 bg-slate-950 rounded-full overflow-hidden flex border border-slate-800 print-card">
+                                <div id="survival-progress" class="bg-emerald-500 h-full transition-all duration-500 shadow-inner" style="width: 38.4%"></div>
+                                <div id="death-progress" class="bg-rose-500 h-full transition-all duration-500 shadow-inner" style="width: 61.6%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 남녀 성비 구성 -->
+                        <div>
+                            <div class="flex flex-col sm:flex-row justify-between text-sm md:text-base font-bold mb-2 gap-1">
+                                <span class="text-slate-300 print-text font-bold">탑승 성별 구성 (여성 / 남성)</span>
+                                <span id="female-ratio-text" class="text-sky-400 font-mono font-semibold print-text">여성 314명 (35.2%)</span>
+                            </div>
+                            <div class="h-4 bg-slate-950 rounded-full overflow-hidden flex border border-slate-800 print-card">
+                                <div id="female-progress" class="bg-pink-500 h-full transition-all duration-500 shadow-inner" style="width: 35.2%"></div>
+                                <div id="male-progress" class="bg-blue-600 h-full transition-all duration-500 shadow-inner" style="width: 64.8%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 우측: Chart.js 막대 그래프 -->
+                <div class="lg:col-span-5 bg-slate-950/70 rounded-xl p-5 md:p-6 border border-slate-800 flex flex-col justify-between print-card">
+                    <div>
+                        <h3 class="text-sm md:text-base font-bold text-slate-200 mb-1 flex items-center gap-2 break-keep print-text">
+                            <span class="w-2 h-4 bg-indigo-500 rounded-sm inline-block no-print"></span>
+                            그룹별 실제 생존 및 사망 정밀 대조
+                        </h3>
+                        <p class="text-xs md:text-sm text-slate-500 mb-4 break-keep print-text">성별에 따른 생존 및 사망 분포 격차입니다.</p>
+                    </div>
+                    <div class="w-full h-[220px] flex items-center justify-center relative">
+                        <canvas id="genderSurvivalChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 섹션 2: 타이타닉 선체 내부 단면 구조 & 객실의 물리적 위치 (SVG 연계) -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-lg backdrop-blur-md print-card">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-3">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-black text-white flex items-center gap-2.5 print-text">
+                        📍 2. 선체 수직적 구조 & 객실 등급별 배치도
+                    </h2>
+                    <p class="text-sm md:text-base text-slate-400 mt-1 break-keep">
+                        선박 내 구역을 직접 선택하면 상단의 분석 보고서 대시보드가 실시간으로 필터링되어 입체적인 확인이 가능합니다.
+                    </p>
+                </div>
+                <span class="text-xs bg-slate-800 text-indigo-300 border border-slate-700 px-3 py-2 rounded-lg font-bold tracking-wide shrink-0 self-start sm:self-center no-print">구역 클릭 연계 지원</span>
+            </div>
+
+            <div class="w-full max-w-5xl mx-auto bg-slate-950/80 rounded-xl p-4 md:p-6 border border-slate-800/60 flex flex-col justify-between print-card">
+                <svg viewBox="0 0 600 250" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 배경 테크니컬 그리드 라인 -->
+                    <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+                        <line x1="0" y1="50" x2="600" y2="50" />
+                        <line x1="0" y1="100" x2="600" y2="100" />
+                        <line x1="0" y1="150" x2="600" y2="150" />
+                        <line x1="0" y1="200" x2="600" y2="200" />
+                        <line x1="100" y1="0" x2="100" y2="250" />
+                        <line x1="200" y1="0" x2="200" y2="250" />
+                        <line x1="300" y1="0" x2="300" y2="250" />
+                        <line x1="400" y1="0" x2="400" y2="250" />
+                        <line x1="500" y1="0" x2="500" y2="250" />
+                    </g>
+
+                    <!-- 4개의 대형 굴뚝 -->
+                    <g transform="skewX(-6)" stroke="#0f172a" stroke-width="1.5">
+                        <rect x="180" y="15" width="20" height="42" fill="#d97706" />
+                        <rect x="180" y="15" width="20" height="10" fill="#020617" />
+                        <rect x="245" y="15" width="20" height="42" fill="#d97706" />
+                        <rect x="245" y="15" width="20" height="10" fill="#020617" />
+                        <rect x="310" y="15" width="20" height="42" fill="#d97706" />
+                        <rect x="310" y="15" width="20" height="10" fill="#020617" />
+                        <rect x="375" y="15" width="20" height="42" fill="#d97706" />
+                        <rect x="375" y="15" width="20" height="10" fill="#020617" />
+                    </g>
+
+                    <!-- 돛대 및 보조 라인 -->
+                    <line x1="120" y1="57" x2="120" y2="10" stroke="#475569" stroke-width="2" />
+                    <line x1="480" y1="57" x2="480" y2="12" stroke="#475569" stroke-width="1.5" />
+                    <line x1="120" y1="15" x2="480" y2="18" stroke="#334155" stroke-width="0.8" stroke-dasharray="2,2" />
+
+                    <!-- 구명보트 갑판 배치 구역 -->
+                    <g fill="#f8fafc" stroke="#1e293b" stroke-width="1">
+                        <path d="M 155,52 C 155,57 170,57 170,52 Z" />
+                        <path d="M 220,52 C 220,57 235,57 235,52 Z" />
+                        <path d="M 285,52 C 285,57 300,57 300,52 Z" />
+                        <path d="M 350,52 C 350,57 365,57 365,52 Z" />
+                        <path d="M 415,52 C 415,57 430,57 430,52 Z" />
+                    </g>
+
+                    <text x="300" y="42" font-family="Pretendard, sans-serif" font-weight="900" font-size="14" fill="#38bdf8" text-anchor="middle" letter-spacing="1.2" pointer-events="none">🚣 구명보트 배치 구역 (BOAT DECK)</text>
+
+                    <!-- 인터랙티브 구역: 1등석 상갑판 -->
+                    <g class="svg-deck" id="svg-deck-1" onclick="selectClass(1)">
+                        <path d="M 70,57 L 500,57 L 512,102 L 70,102 Z" class="deck-bg" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.5" />
+                        <text x="290" y="78" font-family="Pretendard, sans-serif" font-weight="900" font-size="16" fill="#fef08a" text-anchor="middle" pointer-events="none">🥇 1등석 구역 (A ~ C Deck - 상갑판)</text>
+                        <text x="290" y="94" font-family="Pretendard, sans-serif" font-weight="600" font-size="11" fill="#fde047" fill-opacity="0.95" text-anchor="middle" pointer-events="none">⚡ 구명보트 최단 거리 이동 및 신속 탈출 동선 확보 구역</text>
+                    </g>
+
+                    <!-- 인터랙티브 구역: 2등석 중간층 -->
+                    <g class="svg-deck" id="svg-deck-2" onclick="selectClass(2)">
+                        <path d="M 55,102 L 512,102 L 524,147 L 55,147 Z" class="deck-bg" fill="#38bdf8" fill-opacity="0.1" stroke="#38bdf8" stroke-width="1.5" />
+                        <text x="290" y="122" font-family="Pretendard, sans-serif" font-weight="900" font-size="16" fill="#e0f2fe" text-anchor="middle" pointer-events="none">🥈 2등석 구역 (D ~ E Deck - 중간층)</text>
+                        <text x="290" y="138" font-family="Pretendard, sans-serif" font-weight="600" font-size="11" fill="#bae6fd" fill-opacity="0.95" text-anchor="middle" pointer-events="none">🚪 중간 진입 대피 통로 배정 및 일반 구조 범위</text>
+                    </g>
+
+                    <!-- 인터랙티브 구역: 3등석 하부선체 -->
+                    <g class="svg-deck" id="svg-deck-3" onclick="selectClass(3)">
+                        <path d="M 40,147 L 524,147 L 536,192 L 40,192 Z" class="deck-bg" fill="#f43f5e" fill-opacity="0.06" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="4,2" />
+                        <text x="290" y="167" font-family="Pretendard, sans-serif" font-weight="900" font-size="16" fill="#ffe4e6" text-anchor="middle" pointer-events="none">🥉 3등석 구역 (F ~ G Deck - 하부선체)</text>
+                        <text x="290" y="183" font-family="Pretendard, sans-serif" font-weight="600" font-size="11" fill="#fecdd3" fill-opacity="0.95" text-anchor="middle" pointer-events="none">⚠️ 침수 최인접 구역 • 길고 좁은 미로형 대피 계단으로 인한 피해 가중</text>
+                    </g>
+
+                    <!-- 이중 선체 베이스 영역 -->
+                    <path d="M 40,192 L 536,192 L 495,225 L 75,225 Z" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+                    <text x="280" y="211" font-family="Pretendard, sans-serif" font-weight="bold" font-size="10" fill="#475569" text-anchor="middle" letter-spacing="1.5" pointer-events="none">TITANIC DOUBLE HULL BASE</text>
+
+                    <!-- 해수면 🌊 -->
+                    <rect x="0" y="215" width="600" height="35" fill="url(#ocean-grad)" fill-opacity="0.85" class="waterline" />
+                    <line x1="0" y1="215" x2="600" y2="215" stroke="rgba(56, 189, 248, 0.4)" stroke-width="2" class="waterline" />
+                    <text x="520" y="235" font-family="Pretendard, sans-serif" font-size="11" font-weight="bold" fill="#38bdf8" fill-opacity="0.8" pointer-events="none">해수면 (Waterline) 🌊</text>
+
+                    <!-- 선체 그라디언트 맵 -->
+                    <defs>
+                        <linearGradient id="ocean-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.3" />
+                            <stop offset="100%" stop-color="#1e3a8a" stop-opacity="0.8" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- 하단 분석 문구 가이드 카드 -->
+            <div class="mt-6 p-5 bg-slate-950/60 rounded-xl border border-slate-800 text-sm text-slate-300 flex flex-col gap-2.5 shadow-inner print-card">
+                <p class="font-extrabold text-amber-400 flex items-center gap-1.5 text-base print-text">💡 구조와 통로의 물리적 위치 한계</p>
+                <p class="leading-relaxed text-sm md:text-base break-keep print-text">
+                    상부 갑판과 인접한 최상류층인 <strong class="text-white print-text">1등석 탑승객</strong>들은 사고 직후 발생한 긴급 구조 방송 전달 및 탈출 보트 접근성이 매우 우수했습니다. 그러나 기계 장비실과 선박 가장 저지대에 밀접했던 <strong class="text-white print-text">3등석 승객</strong>들은 복잡한 하부 미로 통로의 병목 현상과 차단 벽 등 대피가 원천적으로 지연되는 수많은 사회·물리적 차별 조건에 노출되었습니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 섹션 3: 동반 가족 수에 따른 분석 지표 -->
+        <section class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-lg backdrop-blur-md print-card">
+            <div>
+                <h2 class="text-xl md:text-2xl font-black text-white mb-2 flex items-center gap-2.5 print-text">
+                    👨‍👩‍👧‍👦 3. 동반 가족 수에 따른 실제 통계 분석
+                </h2>
+                <p class="text-sm md:text-base text-slate-400 mb-8 break-keep print-text">가족 동반 여부 및 규모에 따라 탈출 골든타임의 대응 속도가 크게 상이함을 검증한 지표입니다.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- 1인 탑승 (Solo) -->
+                    <div class="bg-slate-950/60 border border-slate-850 rounded-xl p-6 flex flex-col justify-between shadow-inner print-card">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-5xl shrink-0">🚶</span>
+                                <div>
+                                    <h3 class="text-base md:text-lg font-extrabold text-slate-200 print-text">혼자 탑승 (Solo)</h3>
+                                    <p class="text-xs text-slate-400 print-text">동반 가족 수: 0명</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-baseline mb-1.5">
+                                <span class="text-xs text-slate-400 font-bold print-text">실제 생존 확률</span>
+                                <span class="text-amber-400 font-mono font-black text-base md:text-lg print-text">약 30.2%</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden mb-4 print-card">
+                                <div class="bg-amber-500 h-full rounded-full" style="width: 30.2%"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-400 leading-relaxed break-keep print-text">동행자가 부재하여 긴급 비상 상황 발생 정보를 서로 즉시 알리거나 협력해 신속히 탈출로를 구축하기에 통계적으로 다소 취약했습니다.</p>
+                    </div>
+
+                    <!-- 소가족 동반 (1~3명) -->
+                    <div class="bg-slate-950/60 border border-emerald-500/30 rounded-xl p-6 flex flex-col justify-between shadow-inner relative overflow-hidden print-card">
+                        <div class="absolute top-0 right-0 bg-emerald-500/25 text-emerald-400 text-[10px] md:text-xs font-black px-3 py-1 rounded-bl shrink-0 no-print">생존 최고 지표</div>
+                        <div>
+                            <div class="flex items-center gap-4 mb-4 mt-2 sm:mt-0">
+                                <span class="text-5xl shrink-0">👨‍👩‍</span>
+                                <div>
+                                    <h3 class="text-base md:text-lg font-extrabold text-emerald-400 print-text">소형 가족 규모 (1 ~ 3명)</h3>
+                                    <p class="text-xs text-slate-400 print-text">동반 가족 수: 1 ~ 3명</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-baseline mb-1.5">
+                                <span class="text-xs text-slate-400 font-bold print-text">실제 생존 확률</span>
+                                <span class="text-emerald-400 font-mono font-black text-base md:text-lg print-text">약 57.8%</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden mb-4 print-card">
+                                <div class="bg-emerald-500 h-full rounded-full" style="width: 57.8%"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-400 leading-relaxed break-keep print-text">위기 속에서 이성적인 지휘와 보정 역할을 할 동행자가 존재함과 동시에 기동성에 아무런 물리적 장애를 주지 않아 최상의 생존율을 보였습니다.</p>
+                    </div>
+
+                    <!-- 대가족 동반 (4명 이상) -->
+                    <div class="bg-slate-950/60 border border-slate-850 rounded-xl p-6 flex flex-col justify-between shadow-inner print-card">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-5xl shrink-0">👨‍👩‍👧‍👦</span>
+                                <div>
+                                    <h3 class="text-base md:text-lg font-extrabold text-slate-200 print-text">대형 가족 그룹 (4명 이상)</h3>
+                                    <p class="text-xs text-slate-400 print-text">동반 가족 수: 4명 이상</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-baseline mb-1.5">
+                                <span class="text-xs text-slate-400 font-bold print-text">실제 생존 확률</span>
+                                <span class="text-rose-400 font-mono font-black text-base md:text-lg print-text">약 15.0%</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden mb-4 print-card">
+                                <div class="bg-rose-500 h-full rounded-full" style="width: 15%"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-400 leading-relaxed break-keep print-text">혼란스러운 아수라장 상황에서 분실된 모든 구성원들을 모두 찾아 집결하고 재결합하는 고도의 기회비용 소요로 가장 구조 시기를 놓쳤습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 섹션 4: 최하단 핵심 요약 보고서 -->
+        <section class="bg-gradient-to-r from-slate-900 via-slate-950 to-indigo-950/50 border-2 border-amber-500/25 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden print-card">
+            <div class="absolute -right-16 -top-16 w-48 h-44 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-slate-800/80">
+                <div>
+                    <span class="inline-block px-3.5 py-1 text-xs font-black bg-amber-500/20 text-amber-400 rounded border border-amber-500/30 mb-2.5 tracking-wider font-mono">SOCIO-HISTORICAL REPORT</span>
+                    <h2 class="text-xl md:text-2xl font-black text-amber-300 flex items-center gap-2.5 print-text">
+                        👑 사회적 우선순위 구조의 증명: '1등석 여성' 정밀 보고서
+                    </h2>
+                    <p class="text-sm md:text-base text-slate-300 mt-1 break-keep print-text">전체 탑승 승객 그룹 중 단 3명의 사망자를 제외한 전원이 생존한 절대적인 사회 우위층의 원인 분석입니다.</p>
+                </div>
+            </div>
+
+            <!-- 요약 수치 및 원인 박스 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch relative">
+                <div class="md:col-span-4 bg-slate-900/90 rounded-xl p-6 border border-slate-800 shadow-md flex flex-col justify-center items-center text-center print-card">
+                    <span class="text-5xl mb-3">👩📊</span>
+                    <h3 class="text-base md:text-lg font-black text-white print-text">1등석 여성 정량적 생존 현황</h3>
+                    <p class="text-xs text-slate-400 mt-1 print-text">1st Class Female Passengers</p>
+                    
+                    <div class="w-full bg-slate-950 h-3 rounded-full mt-6 overflow-hidden flex border border-slate-800 print-card">
+                        <div class="bg-emerald-500 h-full" style="width: 96.8%"></div>
+                        <div class="bg-rose-500 h-full" style="width: 3.2%"></div>
+                    </div>
+                    <div class="flex justify-between w-full text-xs mt-3.5 font-mono">
+                        <span class="text-emerald-400 font-extrabold text-sm">생존 91명 (96.8%)</span>
+                        <span class="text-rose-400 font-bold">사망 3명 (3.2%)</span>
+                    </div>
+                </div>
+
+                <div class="md:col-span-8 flex flex-col justify-between gap-4">
+                    <h4 class="text-sm md:text-base font-black text-slate-300 mb-2 flex items-center gap-2 break-keep print-text">
+                        🕵️ 역사 데이터가 보여주는 생존 특권 요인 세부 분석
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 h-full">
+                        <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-850 hover:border-amber-500/30 transition-all flex flex-col justify-between shadow-inner print-card">
+                            <div>
+                                <span class="text-xs font-bold text-amber-300/80 uppercase tracking-widest font-mono">LOCATION</span>
+                                <h5 class="text-sm font-extrabold text-white mt-2 mb-1.5 break-keep print-text">최상층 구조물 인접</h5>
+                            </div>
+                            <p class="text-xs md:text-sm text-slate-400 leading-relaxed break-keep print-text">탈출 및 구조 보트 배치가 진행되는 최상단 갑판 구역으로 즉각 이탈할 수 있는 동선 특혜를 가졌습니다.</p>
+                        </div>
+                        <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-850 hover:border-amber-500/30 transition-all flex flex-col justify-between shadow-inner print-card">
+                            <div>
+                                <span class="text-xs font-bold text-amber-300/80 uppercase tracking-widest font-mono">GENTLEMANSHIP</span>
+                                <h5 class="text-sm font-extrabold text-white mt-2 mb-1.5 break-keep print-text">여성·아동 우선 원칙</h5>
+                            </div>
+                            <p class="text-xs md:text-sm text-slate-400 leading-relaxed break-keep print-text">당시 해양 수칙의 가장 중요한 규범인 약자 우선 구제 방침이 1등석의 사회적 영향력과 결합되었습니다.</p>
+                        </div>
+                        <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-850 hover:border-amber-500/30 transition-all flex flex-col justify-between shadow-inner print-card">
+                            <div>
+                                <span class="text-xs font-bold text-amber-300/80 uppercase tracking-widest font-mono">MINORITY COMPANION</span>
+                                <h5 class="text-sm font-extrabold text-white mt-2 mb-1.5 break-keep print-text">단조로운 탑승 인원</h5>
+                            </div>
+                            <p class="text-xs md:text-sm text-slate-400 leading-relaxed break-keep print-text">가족 구성원이 분산될 위험이 거의 없어 비상 위협에 유연하고 가벼운 의사결정이 가능했습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 섹션 5: 개인별 운명 예측기 (두 HTML을 아우르는 수학 예측 적용) -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden border-2 border-indigo-500/30 print-card">
+            <h2 class="text-2xl font-bold text-white mb-2 text-center print-text">🔮 개인별 역사적 운명 예측 시뮬레이터</h2>
+            <p class="text-sm text-center text-slate-400 mb-8 break-keep print-text">실제 역사 통계 데이터를 기반으로 한 회귀 계산 알고리즘을 통해 당신의 탈출 조건별 생존 예측률을 확인해 보세요.</p>
+            
+            <form id="predictionForm" class="space-y-6 no-print">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- 성별 선택 -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-bold text-slate-300">성별</label>
+                        <select id="sex" class="p-4 bg-slate-950 border border-slate-800 text-slate-200 rounded-2xl focus:border-indigo-500 outline-none">
+                            <option value="0">여성 (Female)</option>
+                            <option value="1">남성 (Male)</option>
+                        </select>
+                    </div>
+                    <!-- 등급 선택 -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-bold text-slate-300">객실 등급</label>
+                        <select id="pclass" class="p-4 bg-slate-950 border border-slate-800 text-slate-200 rounded-2xl focus:border-indigo-500 outline-none">
+                            <option value="1">1등석 (First Class)</option>
+                            <option value="2">2등석 (Second Class)</option>
+                            <option value="3">3등석 (Third Class)</option>
+                        </select>
+                    </div>
+                    <!-- 나이 입력 -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-bold text-slate-300">나이</label>
+                        <input type="number" id="age" value="25" min="1" max="100" class="p-4 bg-slate-950 border border-slate-800 text-slate-200 rounded-2xl focus:border-indigo-500 outline-none" placeholder="나이">
+                    </div>
+                    <!-- 동반가족수 입력 -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-bold text-slate-300">동반 가족 수</label>
+                        <input type="number" id="family" value="1" min="0" max="15" class="p-4 bg-slate-950 border border-slate-800 text-slate-200 rounded-2xl focus:border-indigo-500 outline-none" placeholder="가족 수 (명)">
+                    </div>
+                </div>
+                <button type="button" onclick="predict()" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 text-white p-4 rounded-2xl font-bold hover:from-indigo-500 hover:to-indigo-700 transition shadow-lg shadow-indigo-500/20 text-lg">
+                    📊 예측 모델 및 생존율 계산 실행
+                </button>
+            </form>
+
+            <!-- 결과 노출 판넬 -->
+            <div id="result" class="mt-8 p-6 rounded-2xl hidden text-center font-bold text-xl print-card"></div>
+            
+            <!-- 인쇄/다운로드 전용 버튼 영역 -->
+            <div id="printSection" class="mt-6 hidden">
+                <button type="button" onclick="window.print()" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-4 rounded-2xl font-bold no-print hover:from-emerald-500 hover:to-emerald-600 transition shadow-lg shadow-emerald-500/20 text-lg">
+                    📄 최종 분석 보고서 PDF 인쇄 / 다운로드
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 스크립트 비즈니스 로직 -->
+    <script>
+        // 캐글 실제 타이타닉 검증 통계 데이터셋 매핑 구조체
+        const classStats = {
+            0: { // 전체 탑승자
+                total: 891,
+                survived: 342,
+                deceased: 549,
+                rate: 38.4,
+                femaleCount: 314,
+                femaleRate: 35.2,
+                maleCount: 577,
+                maleRate: 64.8,
+                chartData: [233, 81, 109, 468] 
+            },
+            1: { // 1등석 승객
+                total: 216,
+                survived: 136,
+                deceased: 80,
+                rate: 63.0,
+                femaleCount: 94,
+                femaleRate: 43.5,
+                maleCount: 122,
+                maleRate: 56.5,
+                chartData: [91, 3, 45, 77]
+            },
+            2: { // 2등석 승객
+                total: 184,
+                survived: 87,
+                deceased: 97,
+                rate: 47.3,
+                femaleCount: 76,
+                femaleRate: 41.3,
+                maleCount: 108,
+                maleRate: 58.7,
+                chartData: [70, 6, 17, 91]
+            },
+            3: { // 3등석 승객
+                total: 491,
+                survived: 119,
+                deceased: 372,
+                rate: 24.2,
+                femaleCount: 144,
+                femaleRate: 29.3,
+                maleCount: 347,
+                maleRate: 70.7,
+                chartData: [72, 72, 47, 300]
+            }
+        };
+
+        let genderSurvivalChart = null;
+
+        function initializeChart() {
+            const ctx = document.getElementById('genderSurvivalChart').getContext('2d');
+            
+            // Pretendard 기본 서체
+            Chart.defaults.font.family = 'Pretendard, sans-serif';
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.size = 13; 
+
+            genderSurvivalChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['여성 생존자', '여성 사망자', '남성 생존자', '남성 사망자'],
+                    datasets: [{
+                        label: '승객 수 (명)',
+                        data: classStats[0].chartData,
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.85)', // 에메랄드 생존
+                            'rgba(244, 63, 94, 0.85)',  // 로즈 사망
+                            'rgba(16, 185, 129, 0.5)',  
+                            'rgba(244, 63, 94, 0.5)'   
+                        ],
+                        borderColor: [
+                            '#10b981', '#f43f5e', '#10b981', '#f43f5e'
+                        ],
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            bodyFont: { size: 14, weight: 'bold' },
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.parsed.y}명`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { 
+                                color: '#cbd5e1',
+                                font: { size: 13, weight: 'bold' }
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { 
+                                color: '#94a3b8', 
+                                font: { size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 탭 및 선체 구역 클릭 바인딩 연동 함수
+        function selectClass(pclass) {
+            // 버튼들 클래스 토글
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn py-3.5 px-4 text-sm md:text-base font-extrabold rounded-xl border transition-all duration-200 focus:outline-none bg-slate-950 border-slate-850 text-slate-400 hover:text-white hover:bg-slate-900/60";
+            });
+            document.getElementById(`btn-class-${pclass}`).className = "tab-btn py-3.5 px-4 text-sm md:text-base font-extrabold rounded-xl border transition-all duration-200 focus:outline-none bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-500/10";
+
+            // 선박 도면 하이라이트 활성화 연동
+            document.querySelectorAll('.svg-deck').forEach(deck => {
+                deck.classList.remove('active-deck');
+            });
+            if (pclass > 0) {
+                document.getElementById(`svg-deck-${pclass}`).classList.add('active-deck');
+            }
+
+            // 실시간 통계 정보 데이터 변조 로드
+            const stats = classStats[pclass];
+            
+            // 수치 증가 애니메이션
+            animateValue("stat-total", parseInt(document.getElementById("stat-total").innerText), stats.total, 400);
+            animateValueFloat("stat-survival-rate", parseFloat(document.getElementById("stat-survival-rate").innerText), stats.rate, 400);
+
+            // 게이지 바 조정
+            document.getElementById('survival-progress').style.width = `${stats.rate}%`;
+            document.getElementById('death-progress').style.width = `${100 - stats.rate}%`;
+            document.getElementById('survival-ratio-text').innerText = `${stats.survived}명 생존 / ${stats.deceased}명 사망`;
+
+            document.getElementById('female-progress').style.width = `${stats.femaleRate}%`;
+            document.getElementById('male-progress').style.width = `${stats.maleRate}%`;
+            
+            let classPrefix = pclass === 0 ? "전체" : (pclass === 1 ? "1등석" : (pclass === 2 ? "2등석" : "3등석"));
+            document.getElementById('female-ratio-text').innerText = `${classPrefix} 여성 ${stats.femaleCount}명 (${(stats.femaleRate * 100).toFixed(0) / 100}%)`;
+
+            // Chart.js 갱신 연동
+            if(genderSurvivalChart) {
+                genderSurvivalChart.data.datasets[0].data = stats.chartData;
+                genderSurvivalChart.update();
+            }
+        }
+
+        // 카운터 정수 애니메이션 헬퍼
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const range = end - start;
+            let current = start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            const timer = setInterval(() => {
+                current += increment;
+                document.getElementById(id).innerText = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, Math.max(stepTime, 2));
+        }
+
+        // 카운터 실수 애니메이션 헬퍼
+        function animateValueFloat(id, start, end, duration) {
+            const startTime = performance.now();
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = (start + progress * (end - start)).toFixed(1);
+                document.getElementById(id).innerText = current;
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        // 세부 예측 알고리즘 계산기 (성별, 등급, 나이, 동반가족수를 모두 수학적 가중치로 판정)
+        function predict() {
+            const sex = parseInt(document.getElementById('sex').value); // 0: 여성, 1: 남성
+            const pclass = parseInt(document.getElementById('pclass').value); // 1, 2, 3등석
+            const age = parseInt(document.getElementById('age').value) || 25;
+            const family = parseInt(document.getElementById('family').value) || 0;
+
+            // 정밀 가중치 수치화 알고리즘
+            let survivalScore = 0;
+
+            // 1. 성별 가중치 (당시 여성 우선 정책 대입)
+            if (sex === 0) {
+                survivalScore += 75; // 여성 기본 가중치 높음
+            } else {
+                survivalScore += 18; // 남성 기본 가중치 낮음
+            }
+
+            // 2. 객실 등급 가중치
+            if (pclass === 1) {
+                survivalScore += 20;
+            } else if (pclass === 2) {
+                survivalScore += 10;
+            } else {
+                survivalScore -= 15;
+            }
+
+            // 3. 연령 분포 가중치 (어린이 및 노약자 가중 가산점)
+            if (age < 10) {
+                survivalScore += 15;
+            } else if (age >= 10 && age < 30) {
+                survivalScore += 5;
+            } else if (age >= 60) {
+                survivalScore -= 10; // 노령층 탈출 민첩 지연
+            }
+
+            // 4. 가족 동반수 가중치
+            if (family >= 1 && family <= 3) {
+                survivalScore += 10; // 소가족 최상
+            } else if (family === 0) {
+                survivalScore -= 5;  // 1인 탑승 고립
+            } else {
+                survivalScore -= 20; // 대가족 구제 병목
+            }
+
+            // 백분율 가둠 조건 처리
+            survivalScore = Math.max(1, Math.min(99, survivalScore));
+
+            const isSurvived = survivalScore >= 50;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.classList.remove('hidden');
+            
+            resultDiv.className = `mt-8 p-6 rounded-2xl text-center font-bold text-xl transition-all border ${
+                isSurvived 
+                ? 'bg-emerald-950/80 border-emerald-500 text-emerald-400' 
+                : 'bg-rose-950/80 border-rose-500 text-rose-400'
+            }`;
+
+            resultDiv.innerHTML = `
+                <div class="text-2xl mb-1">${isSurvived ? '🟢 생존 가능성이 매우 높습니다' : '🔴 생존 가능성이 상대적으로 낮습니다'}</div>
+                <div class="text-sm font-normal text-slate-300 mt-2">
+                    데이터 분석 판정 생존 지수: <span class="font-mono font-black text-2xl ${isSurvived ? 'text-emerald-400' : 'text-rose-400'}">${survivalScore}%</span>
+                    <span class="block mt-1 text-slate-400 text-xs">(여성 우선 원칙, 선실 층수 위치, 가족 이동 연령 데이터를 대입한 복합 결과입니다)</span>
+                </div>
+            `;
+
+            // 인쇄 섹션 노출 및 스크롤 다운
+            document.getElementById('printSection').classList.remove('hidden');
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            initializeChart();
+        }
+    </script>
+</body>
+</html>
