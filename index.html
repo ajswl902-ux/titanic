@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>붓꽃 연대기 (The Iris Chronicles)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans KR & Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+        /* Custom scrollbar for beautiful flower theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5F3FF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C084FC;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A855F7;
+        }
+        /* Flower floating animation */
+        @keyframes gentle-sway {
+            0%, 100__ { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(3deg); }
+        }
+        .sway-flower {
+            animation: gentle-sway 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-tr from-[#FAF5FF] via-[#FFFDF9] to-[#EEF2FF] text-slate-800 min-h-screen flex flex-col selection:bg-purple-200 selection:text-purple-900">
+
+    <!-- TOP HEADER BAR -->
+    <header class="border-b border-purple-100 bg-white/75 backdrop-blur-md sticky top-0 z-50 px-6 py-4 shadow-sm shadow-purple-100/30">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <!-- Glowing Flower Brand Icon -->
+                <div class="p-2.5 bg-gradient-to-br from-purple-400 via-violet-400 to-indigo-400 rounded-2xl shadow-md shadow-purple-200/50 sway-flower">
+                    <svg class="w-7.5 h-7.5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,2A3,3 0 0,0 9,5C9,6.08 9.58,7.03 10.42,7.56C7.5,9.15 5.5,12.31 5.5,16A2,2 0 0,0 7.5,18C8.5,18 9.38,17.43 9.81,16.59C10.27,15.68 11.08,15 12,15C12.92,15 13.73,15.68 14.19,16.59C14.62,17.43 15.5,18 16.5,18A2,2 0 0,0 18.5,16C18.5,12.31 16.5,9.15 13.58,7.56C14.42,7.03 15,6.08 15,5A3,3 0 0,0 12,2M12,4A1,1 0 0,1 13,5A1,1 0 0,1 12,6A1,1 0 0,1 11,5A1,1 0 0,1 12,4M7.5,16C7.5,13.5 8.9,11.3 11,10.2V13C11,13.6 11.4,14 12,14C12.6,14 13,13.6 13,13V10.2C15.1,11.3 16.5,13.5 16.5,16H15C14.4,16 14,15.6 14,15C14,13.9 13.1,13 12,13C10.9,13 10,13.9 10,15C10,15.6 9.6,16 9,16H7.5Z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-violet-500 to-indigo-600">
+                        붓꽃 연대기 <span class="text-xs font-semibold text-purple-400 ml-1">The Iris Chronicles</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">자연사와 미려한 데이터 그래픽이 흐르는 아이리스 정원</p>
+                </div>
+            </div>
+            
+            <!-- Beautiful Tab Navigation with Flower Icons -->
+            <nav class="flex bg-purple-50/70 p-1.5 rounded-2xl border border-purple-100 shadow-inner">
+                <button onclick="switchTab('story')" id="btn-story" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 bg-white text-purple-700 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    스토리 정원
+                </button>
+                <button onclick="switchTab('classifier')" id="btn-classifier" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-purple-400 hover:text-purple-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3" />
+                    </svg>
+                    AI 분류분석
+                </button>
+                <button onclick="switchTab('data')" id="btn-data" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-purple-400 hover:text-purple-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                    </svg>
+                    통계 매트릭스
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTENT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 space-y-8">
+
+        <!-- ==================== TAB 1: STORY BOOK ==================== -->
+        <section id="tab-story" class="tab-content space-y-8 animate-fade-in">
+            
+            <!-- Beautiful Real Iris Flower Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-slate-900 border border-purple-100 shadow-xl min-h-[340px] flex items-center">
+                <!-- Gorgeous purple iris flower background from Unsplash -->
+                <div class="absolute inset-0 bg-cover bg-center opacity-70 scale-105" style="background-image: url('https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=1200&q=80');"></div>
+                <!-- Premium Color Overlay matching pastel floral garden -->
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-950/85 via-purple-900/60 to-transparent"></div>
+                
+                <div class="relative max-w-3xl p-8 md:p-12 space-y-4 text-white">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold tracking-wider text-purple-200 uppercase bg-purple-900/40 rounded-full border border-purple-300/30 backdrop-blur-sm">
+                        🌸 대자연의 황금비율
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                        세 가지 붓꽃의 이야기
+                    </h2>
+                    <p class="text-purple-100 text-sm md:text-base leading-relaxed font-medium drop-shadow-sm">
+                        통계학의 역사적 보물, 아이리스 데이터를 통해 각 품종이 수만 년간 적응하고 발달시켜 온 생명의 흔적을 한눈에 살펴보세요. 처음 보시는 분들도 아래 요소들을 직접 클릭하면서 재미있게 배울 수 있습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==================== [NEW] CLICKABLE BOTANICAL ANATOMIST (인터랙티브 붓꽃 해부 도감) ==================== -->
+            <div class="bg-white rounded-3xl border border-purple-100 shadow-md p-6 md:p-8 space-y-6">
+                <div class="flex items-center gap-2 border-b border-purple-50 pb-4">
+                    <span class="text-2xl">🔍</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">터치해 배우는 '붓꽃 해부 도감'</h3>
+                        <p class="text-xs text-slate-500">일러스트의 꽃 부위를 마우스로 직접 클릭하면 비밀이 열립니다!</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Left: Interactive Vector Flower SVG -->
+                    <div class="lg:col-span-5 flex flex-col items-center justify-center bg-purple-50/30 rounded-2xl p-6 border border-purple-50/50">
+                        <span class="text-[10px] text-purple-400 font-bold uppercase tracking-widest mb-4">CLICK FLOWER PARTS BELOW</span>
+                        
+                        <svg viewBox="0 0 200 220" class="w-full max-w-[220px] h-auto drop-shadow-md">
+                            <!-- Stem -->
+                            <path d="M100,140 Q100,180 95,210" stroke="#34D399" stroke-width="6" stroke-linecap="round" fill="none"/>
+                            
+                            <!-- Outer Sepals (꽃받침) - Clickable zones -->
+                            <!-- Left Sepal -->
+                            <path id="svg-sepal-l" onclick="clickAnatomy('sepal')" d="M100,110 C50,110 30,150 45,175 C60,190 100,140 100,110 Z" 
+                                  class="fill-purple-300 hover:fill-purple-400 cursor-pointer transition-colors duration-200" stroke="#FAF5FF" stroke-width="1.5" />
+                            <!-- Right Sepal -->
+                            <path id="svg-sepal-r" onclick="clickAnatomy('sepal')" d="M100,110 C150,110 170,150 155,175 C140,190 100,140 100,110 Z" 
+                                  class="fill-purple-300 hover:fill-purple-400 cursor-pointer transition-colors duration-200" stroke="#FAF5FF" stroke-width="1.5" />
+                            <!-- Bottom Sepal -->
+                            <path id="svg-sepal-b" onclick="clickAnatomy('sepal')" d="M100,110 C100,160 80,180 100,195 C120,180 100,160 100,110 Z" 
+                                  class="fill-purple-400 hover:fill-purple-500 cursor-pointer transition-colors duration-200" stroke="#FAF5FF" stroke-width="1.5" />
+
+                            <!-- Inner Petals (꽃잎) - Clickable zones -->
+                            <!-- Top/Center Petal -->
+                            <path id="svg-petal-c" onclick="clickAnatomy('petal')" d="M100,110 C85,60 70,30 100,15 C130,30 115,60 100,110 Z" 
+                                  class="fill-indigo-400 hover:fill-indigo-500 cursor-pointer transition-colors duration-200" stroke="#FAF5FF" stroke-width="1.5" />
+                            <!-- Left Petal -->
+                            <path id="svg-petal-l" onclick="clickAnatomy('petal')" d="M100,110 C70,90 50,60 70,45 C90,30 100,90 100,110 Z" 
+                                  class="fill-indigo-300 hover:fill-indigo-400 cursor-pointer transition-colors duration-200" stroke="#FAF5FF" stroke-width="1.5" />
+                            <!-- Right Petal -->
+                            <path id="svg-petal-r" onclick="clickAnatomy('petal')" d="M100,110 C130,90 150,60 130,45 C110,30 100,90 100,110 Z" 
+                                  class="fill-indigo-300 hover:fill-indigo-400 cursor-pointer transition-colors duration-200" stroke="#FAF5FF" stroke-width="1.5" />
+
+                            <!-- Center pistil core (decoration) -->
+                            <circle cx="100" cy="110" r="10" fill="#FBBF24" class="pointer-events-none" />
+                        </svg>
+
+                        <div class="flex gap-4 mt-4">
+                            <button onclick="clickAnatomy('sepal')" class="px-3 py-1 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg text-xs font-bold transition-all">🍂 꽃받침 (Sepal) 선택</button>
+                            <button onclick="clickAnatomy('petal')" class="px-3 py-1 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 rounded-lg text-xs font-bold transition-all">🌸 꽃잎 (Petal) 선택</button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Dynamic Anatomical Details Card -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div id="anatomy-info-panel" class="p-6 bg-gradient-to-tr from-purple-50/50 to-pink-50/50 rounded-2xl border border-purple-100/50 space-y-3 min-h-[220px] flex flex-col justify-center transition-all duration-300">
+                            <!-- Injected dynamically on click -->
+                            <div class="text-center space-y-2">
+                                <span class="text-3xl animate-bounce inline-block">👆</span>
+                                <h4 class="text-base font-bold text-slate-800">꽃잎 또는 꽃받침을 터치해 보세요!</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed max-w-md mx-auto">
+                                    일러스트 상단의 우뚝 솟은 안쪽 꽃잎들을 클릭하거나 양옆으로 넓게 드리워진 보랏빛 꽃받침을 클릭하면 데이터 특징과 생존 진화 역사의 쓰임새를 한 번에 열람할 수 있습니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TOP SECTION: BEGINNER'S GUIDE (PURE DATA AVERAGES) ==================== -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="p-1.5 bg-purple-100 rounded-lg text-purple-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">붓꽃을 처음 만나는 분을 위한 3대 품종 요약</h3>
+                        <p class="text-xs text-slate-500">순수 평균 데이터 수치로 비교하는 품종별 개성과 고유 외형</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 1. SETOSA BEGINNER CARD -->
+                    <div class="bg-gradient-to-br from-white to-emerald-50/20 p-6 rounded-2xl border border-purple-100/70 shadow-sm flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-emerald-600 bg-emerald-100/50 px-2.5 py-1 rounded-full flex items-center gap-1">🌸 가장 작고 통통함</span>
+                                <span class="text-sm font-bold text-slate-400">#Setosa</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-800">세토사 (Setosa)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                꽃받침 너비는 세 종 중에서 가장 넓지만, 꽃잎 크기는 압도적으로 작고 짧습니다. 전체적으로 키가 작고 뚱뚱한 귀여운 모양새를 지니고 있어 붓꽃을 모르는 사람도 꽃잎 길이만 보고 단번에 식별할 수 있습니다.
+                            </p>
+                        </div>
+                        <!-- Average Metrics Visual representation -->
+                        <div class="bg-white/80 p-3 rounded-xl border border-emerald-100/80 space-y-2 text-xs">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[11px]"><span>꽃잎 길이 (매우 작음):</span><span class="font-bold text-slate-700">1.46 cm</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-400 h-full rounded-full" style="width: 25%"></div></div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[11px]"><span>꽃받침 너비 (가장 넓음):</span><span class="font-bold text-slate-700">3.43 cm</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: 90%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. VERSICOLOR BEGINNER CARD -->
+                    <div class="bg-gradient-to-br from-white to-violet-50/20 p-6 rounded-2xl border border-purple-100/70 shadow-sm flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-violet-600 bg-violet-100/50 px-2.5 py-1 rounded-full flex items-center gap-1">🌸 완벽한 중간 비율</span>
+                                <span class="text-sm font-bold text-slate-400">#Versicolor</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-800">버시컬러 (Versicolor)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                어느 한 부위도 지나치게 기형적으로 크거나 작지 않습니다. 모든 데이터 수치(꽃잎 길이, 꽃받침 길이, 너비 등)가 세토사와 버지니카의 수학적 황금분할점 중간에 딱 머무르고 있는 균형 잡힌 개체입니다.
+                            </p>
+                        </div>
+                        <!-- Average Metrics Visual representation -->
+                        <div class="bg-white/80 p-3 rounded-xl border border-violet-100/80 space-y-2 text-xs">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[11px]"><span>꽃잎 길이 (적절함):</span><span class="font-bold text-slate-700">4.26 cm</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-violet-400 h-full rounded-full" style="width: 60%"></div></div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[11px]"><span>꽃받침 너비 (평균적):</span><span class="font-bold text-slate-700">2.77 cm</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-violet-500 h-full rounded-full" style="width: 65%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. VIRGINICA BEGINNER CARD -->
+                    <div class="bg-gradient-to-br from-white to-pink-50/20 p-6 rounded-2xl border border-purple-100/70 shadow-sm flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-pink-600 bg-pink-100/50 px-2.5 py-1 rounded-full flex items-center gap-1">🌸 가장 거대하고 길쭉함</span>
+                                <span class="text-sm font-bold text-slate-400">#Virginica</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-800">버지니카 (Virginica)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                압도적인 스케일의 대형 품종입니다. 꽃잎 길이는 물론 꽃받침 길이(평균 6.59cm)에 이르기까지 가로세로 모든 부피가 세 품종 중 가장 시원시원하게 거대하게 발달한 '남부 습지의 여왕'다운 실루엣을 뽐냅니다.
+                            </p>
+                        </div>
+                        <!-- Average Metrics Visual representation -->
+                        <div class="bg-white/80 p-3 rounded-xl border border-pink-100/80 space-y-2 text-xs">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[11px]"><span>꽃잎 길이 (압도적 거대함):</span><span class="font-bold text-slate-700">5.55 cm</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-pink-400 h-full rounded-full" style="width: 95%"></div></div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[11px]"><span>꽃받침 너비 (중상 수준):</span><span class="font-bold text-slate-700">2.97 cm</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-pink-500 h-full rounded-full" style="width: 72%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDF 원본 기반 핵심 분석 그래프 섹션 (1. 꽃받침 평균 길이, 2. 꽃잎 황금비 상자수염 그림) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
+                
+                <!-- 1. 품종별 꽃받침 길이 평균 그래프 (Page 1 원본 수치 완벽 복원) -->
+                <div class="rounded-3xl border border-purple-100 bg-white p-6 space-y-4 shadow-md">
+                    <div>
+                        <h4 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                            품종별 꽃받침 길이 평균 비교 <span class="text-xs font-normal text-slate-400">(PDF Page 1 분석 자료)</span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-1">꽃받침의 단순 뼈대 길이는 virginica로 갈수록 커집니다.</p>
+                    </div>
+                    <!-- Bar Chart Canvas -->
+                    <div class="relative w-full bg-slate-50/50 rounded-2xl border border-purple-50 p-2 overflow-hidden">
+                        <canvas id="bar-chart-canvas" class="w-full aspect-[4/2.2] block"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed bg-purple-50/30 p-3 rounded-xl border border-purple-100/50">
+                        💡 **데이터 해석:** 꽃받침 길이는 세토사(5.01cm), 버시컬러(5.94cm), 버지니카(6.59cm) 순으로 일정하게 증가하는 선형적 발달 패턴을 보여주고 있습니다.
+                    </p>
+                </div>
+
+                <!-- 2. 품종별 꽃잎 가로세로 비율 분포 (PDF Page 7 상자 수염 그림 완벽 재현) -->
+                <div class="rounded-3xl border border-purple-100 bg-white p-6 space-y-4 shadow-md">
+                    <div>
+                        <h4 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+                            꽃잎의 가로세로 비율(황금비) 분포 <span class="text-xs font-normal text-slate-400">(PDF Page 7 분석 자료)</span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-1">품종에 따라 고유하고 격리된 가로세로 '황금비' 비율 분포를 박스플롯으로 재현합니다.</p>
+                    </div>
+                    <!-- Box Plot Canvas -->
+                    <div class="relative w-full bg-slate-50/50 rounded-2xl border border-purple-50 p-2 overflow-hidden">
+                        <canvas id="box-plot-canvas" class="w-full aspect-[4/2.2] block"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed bg-purple-50/30 p-3 rounded-xl border border-purple-100/50">
+                        💡 **데이터 해석:** 세토사(Setosa)는 꽃잎 길이 대비 너비의 편차가 극도로 크고 독특한 비율(4.7~15.0)을 가진 반면, 버시컬러와 버지니카는 2.0~4.0 부근의 극도로 안정된 황금 비율 분포를 따릅니다.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- ==================== [NEW - CLICKABLE EXPANDABLE] BOTTOM SECTION: EVOLUTIONARY STORIES AS CARD NEWS ==================== -->
+            <div class="space-y-4 pt-6">
+                <div class="flex items-center gap-2 border-b border-purple-100 pb-3">
+                    <div class="p-1.5 bg-pink-100 rounded-lg text-pink-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">진화 연대기: 생존의 진화가 남긴 흔적</h3>
+                        <p class="text-xs text-slate-500">카드를 직접 클릭해 숨겨진 자연의 생존 연대기 비밀을 잠금 해제해 보세요!</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- CARD 1: SETOSA HISTORICAL STORY (Clickable Expandable) -->
+                    <div onclick="toggleStoryCard('setosa-story')" class="bg-white rounded-3xl border border-purple-100/80 shadow-md hover:shadow-lg hover:border-purple-300 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer">
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl filter drop-shadow">🥶</span>
+                                    <h4 class="text-base font-black text-slate-800">1. 세토사 (Iris Setosa)</h4>
+                                </div>
+                                <span id="setosa-story-arrow" class="text-purple-400 font-bold text-sm">자세히 보기 🔓</span>
+                            </div>
+                            <div class="border-l-4 border-emerald-400 pl-3">
+                                <h5 class="text-xs font-bold text-emerald-600">추위를 이겨낸 콤팩트한 개척자</h5>
+                                <p class="text-[11px] text-slate-400">"고위도의 거센 바람을 피해 몸집을 줄이다"</p>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed line-clamp-3" id="setosa-story-brief">
+                                주로 알래스카와 캐나다 등 혹독한 고위도 한랭 지대에서 번성했습니다. 매서운 동해와 강풍을 견디기 위해 꽃잎 크기를 극소화(평균 1.46cm)하며 에너지를 보존했습니다.
+                            </p>
+                            <!-- Hidden Full Content inside Accordion -->
+                            <div id="setosa-story-full" class="hidden text-xs text-slate-600 leading-relaxed pt-2 border-t border-slate-100 animate-fade-in space-y-2">
+                                <p>세토사는 시베리아 동부, 알래스카 등 혹독한 북풍이 몰아치는 척박한 연안 지대에 뿌리를 내렸습니다. 얼어붙는 바람에서 꽃샘을 사수하기 위해 꽃의 본체인 꽃잎을 극도로 소형화(평균 1.46cm)하여 비바람 마찰을 최소화했습니다.</p>
+                                <p>그러나 꽃이 작다고 수분까지 포기할 수 없었습니다. 혹한 속에 희귀하게 지나가는 소형 파리, 작은 벌 등의 귀중한 방문객들이 안전하게 안착하여 수분을 성공할 수 있도록, 꿀샘으로 유도하는 꽃받침 가로폭은 3.43cm로 극대화된 착륙 활주로 설계를 완성했습니다.</p>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-r from-emerald-50 to-white px-6 py-4 border-t border-purple-50 text-[11px] text-slate-500 font-semibold flex justify-between items-center">
+                            <span>🌱 서식기후: 고위도 한랭지</span>
+                            <span class="text-emerald-600 font-bold">진화코드: 극소화 x 착륙패드</span>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: VERSICOLOR HISTORICAL STORY (Clickable Expandable) -->
+                    <div onclick="toggleStoryCard('versicolor-story')" class="bg-white rounded-3xl border border-purple-100/80 shadow-md hover:shadow-lg hover:border-purple-300 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer">
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl filter drop-shadow">🧬</span>
+                                    <h4 class="text-base font-black text-slate-800">2. 버시컬러 (Iris Versicolor)</h4>
+                                </div>
+                                <span id="versicolor-story-arrow" class="text-purple-400 font-bold text-sm">자세히 보기 🔓</span>
+                            </div>
+                            <div class="border-l-4 border-violet-400 pl-3">
+                                <h5 class="text-xs font-bold text-violet-600">빙하기가 빚어낸 황금빛 타협점</h5>
+                                <p class="text-[11px] text-slate-400">"세토사와 버지니카 가문의 역사적인 자연 교잡"</p>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed line-clamp-3" id="versicolor-story-brief">
+                                수만 년 전 빙하기 기후 대이동 당시, 북부의 세토사 조상과 남부의 버지니카 조상이 격동의 경계선에서 기적적으로 만나 탄생한 자연적 교잡종입니다.
+                            </p>
+                            <!-- Hidden Full Content inside Accordion -->
+                            <div id="versicolor-story-full" class="hidden text-xs text-slate-600 leading-relaxed pt-2 border-t border-slate-100 animate-fade-in space-y-2">
+                                <p>수만 년 전 대륙을 뒤덮은 빙하기가 찾아오며 침엽수림 장막이 걷히고 지형의 경계가 무너졌습니다. 이때 극한 한랭지의 '세토사' 무리와 온화한 남부의 '버지니카' 집단이 피난처 경계부에서 수만 년 만에 조우하게 됩니다.</p>
+                                <p>이 두 고대 조상이 숲의 회랑에서 인연을 맺어 결합된 자연 하이브리드(Hybrid)가 바로 버시컬러입니다. 두 가문의 우수한 형질을 수학적으로 균등하게 50%씩 상속받았기에, 꽃잎과 꽃받침의 비율 역시 두 종의 정중앙에 수렴하는 완벽하고 정밀한 중용의 미를 구현해냈습니다.</p>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-r from-violet-50 to-white px-6 py-4 border-t border-purple-50 text-[11px] text-slate-500 font-semibold flex justify-between items-center">
+                            <span>🌱 서식기후: 기후 완충지대</span>
+                            <span class="text-violet-600 font-bold">진화코드: 자연 하이브리드</span>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: VIRGINICA HISTORICAL STORY (Clickable Expandable) -->
+                    <div onclick="toggleStoryCard('virginica-story')" class="bg-white rounded-3xl border border-purple-100/80 shadow-md hover:shadow-lg hover:border-purple-300 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer">
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl filter drop-shadow">👑</span>
+                                    <h4 class="text-base font-black text-slate-800">3. 버지니카 (Iris Virginica)</h4>
+                                </div>
+                                <span id="virginica-story-arrow" class="text-purple-400 font-bold text-sm">자세히 보기 🔓</span>
+                            </div>
+                            <div class="border-l-4 border-pink-400 pl-3">
+                                <h5 class="text-xs font-bold text-pink-600">아열대 습지를 화사하게 지배하는 여왕</h5>
+                                <p class="text-[11px] text-slate-400">"호박벌을 독점하기 위해 신체 스케일을 극대화하다"</p>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed line-clamp-3" id="virginica-story-brief">
+                                햇빛과 양분이 가득한 미국 동남부 온화한 습지에서 진화했습니다. 우거진 초목들 사이에서 광합성 경쟁을 벌이고, 대형 벌들을 매혹하기 위해 극대화되었습니다.
+                            </p>
+                            <!-- Hidden Full Content inside Accordion -->
+                            <div id="virginica-story-full" class="hidden text-xs text-slate-600 leading-relaxed pt-2 border-t border-slate-100 animate-fade-in space-y-2">
+                                <p>버지니카는 강수량이 풍부하고 일조량이 넘쳐나는 미국 남동부의 광활한 평야 및 영양 늪지대에 둥지를 틀었습니다. 경쟁 무리가 가득한 식물계에서 우뚝 솟아 광합성 권한을 독점하기 위해 줄기와 이파리를 세토사의 3배 이상 거대화했습니다.</p>
+                                <p>특히 이 지역의 수분을 전담하는 거대 호박벌(Bumblebee)들의 웅장한 안광을 사로잡기 위해 화려하고 긴 꽃잎(평균 5.55cm)을 자랑하며 진화했고, 몸집이 커다랗고 무거운 호박벌이 내려앉아 힘껏 흔들어도 꺾이지 않도록 위아래로 길쭉하고 단단하게 축조된 슬림형 특수 지지대 꽃받침을 발달시켰습니다.</p>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-r from-pink-50 to-white px-6 py-4 border-t border-purple-50 text-[11px] text-slate-500 font-semibold flex justify-between items-center">
+                            <span>🌱 서식기후: 남부 아열대 늪</span>
+                            <span class="text-pink-600 font-bold">진화코드: 여왕의 대형화</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 2: AI CLASSIFIER ==================== -->
+        <section id="tab-classifier" class="tab-content hidden space-y-8 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left Column: Controls (Floral Sliders & Presets) -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="rounded-3xl border border-purple-100 bg-white p-6 space-y-6 shadow-xl relative overflow-hidden">
+                        <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-100/30 rounded-full blur-2xl pointer-events-none"></div>
+                        
+                        <!-- Auto presets Simulation Panel -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-purple-500 uppercase tracking-widest flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-ping"></span>
+                                원클릭 품종 평균 피팅 시뮬레이터
+                            </h4>
+                            <p class="text-[11px] text-slate-400">원하시는 품종 버튼을 클릭해 보세요! 슬라이더가 평균값으로 자동 피팅되며 우측 그래프 상에 실시간으로 위치가 연동되어 움직입니다.</p>
+                            
+                            <div class="grid grid-cols-3 gap-2 pt-1">
+                                <button onclick="applyPreset(5.0, 3.4, 1.5, 0.2)" class="px-2.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-[11px] font-bold border border-emerald-100 transition-all shadow-sm">
+                                    🌸 Setosa 피팅
+                                </button>
+                                <button onclick="applyPreset(5.9, 2.8, 4.3, 1.3)" class="px-2.5 py-2 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-[11px] font-bold border border-violet-100 transition-all shadow-sm">
+                                    🌿 Versicolor 피팅
+                                </button>
+                                <button onclick="applyPreset(6.6, 3.0, 5.6, 2.0)" class="px-2.5 py-2 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl text-[11px] font-bold border border-pink-100 transition-all shadow-sm">
+                                    👑 Virginica 피팅
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-purple-50 pt-4">
+                            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,1.82C11.43,1.82 10.95,2.15 10.74,2.65L8.35,8.12L2.43,8.58C1.86,8.62 1.43,9.11 1.47,9.68C1.5,10.1 1.76,10.45 2.12,10.6L6.72,13.84L5.27,19.64C5.14,20.2 5.48,20.76 6.04,20.89C6.44,20.98 6.85,20.84 7.12,20.52L12,17L16.88,20.52C17.35,20.86 18,20.76 18.34,20.28C18.57,19.96 18.63,19.55 18.5,19.18L17.05,13.38L21.65,10.14C22.12,9.81 22.24,9.17 21.91,8.7C21.7,8.4 21.36,8.21 21,8.16L15.08,7.7L12.69,2.23C12.48,1.73 12,1.4 11.43,1.4H12V1.82Z" />
+                                </svg>
+                                붓꽃 세부 형태 측정기 <span class="text-xs text-slate-400 font-normal">(수치 조작)</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">슬라이더를 미세 조정하여 붓꽃의 수치적 성장과 형태 변화를 직접 확인하세요.</p>
+                        </div>
+
+                        <!-- SLIDER 1: Sepal Length -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-600 font-semibold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-purple-400"></span> 꽃받침 길이 (Sepal Length)
+                                </span>
+                                <span id="val-sepal-l" class="font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100">5.8 cm</span>
+                            </div>
+                            <input type="range" id="slider-sepal-l" min="4.0" max="8.0" step="0.1" value="5.8" oninput="updatePredictor()" class="w-full accent-purple-500 bg-purple-50 h-2.5 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium"><span>4.0cm (최소)</span><span>8.0cm (최대)</span></div>
+                        </div>
+
+                        <!-- SLIDER 2: Sepal Width -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-600 font-semibold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-violet-400"></span> 꽃받침 너비 (Sepal Width)
+                                </span>
+                                <span id="val-sepal-w" class="font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-lg border border-violet-100">3.0 cm</span>
+                            </div>
+                            <input type="range" id="slider-sepal-w" min="2.0" max="4.5" step="0.1" value="3.0" oninput="updatePredictor()" class="w-full accent-violet-500 bg-purple-50 h-2.5 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium"><span>2.0cm (최소)</span><span>4.5cm (최대)</span></div>
+                        </div>
+
+                        <!-- SLIDER 3: Petal Length -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-600 font-semibold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-pink-400"></span> 꽃잎 길이 (Petal Length)
+                                </span>
+                                <span id="val-petal-l" class="font-bold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg border border-pink-100">4.3 cm</span>
+                            </div>
+                            <input type="range" id="slider-petal-l" min="1.0" max="7.0" step="0.1" value="4.3" oninput="updatePredictor()" class="w-full accent-pink-500 bg-purple-50 h-2.5 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium"><span>1.0cm (최소)</span><span>7.0cm (최대)</span></div>
+                        </div>
+
+                        <!-- SLIDER 4: Petal Width -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-600 font-semibold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-rose-400"></span> 꽃잎 너비 (Petal Width)
+                                </span>
+                                <span id="val-petal-w" class="font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">1.3 cm</span>
+                            </div>
+                            <input type="range" id="slider-petal-w" min="0.1" max="2.5" step="0.1" value="1.3" oninput="updatePredictor()" class="w-full accent-rose-500 bg-purple-50 h-2.5 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium"><span>0.1cm (최소)</span><span>2.5cm (최대)</span></div>
+                        </div>
+
+                        <!-- Derived Ratios Metrics Panel -->
+                        <div class="p-4 bg-gradient-to-tr from-purple-50/50 to-pink-50/50 rounded-2xl border border-purple-100/80 grid grid-cols-2 gap-4">
+                            <div class="text-center space-y-1">
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">꽃받침 세로/가로 비율</p>
+                                <p id="derived-sepal-ratio" class="text-base font-black text-purple-700">1.93</p>
+                            </div>
+                            <div class="text-center space-y-1">
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">꽃잎 세로/가로 비율</p>
+                                <p id="derived-petal-ratio" class="text-base font-black text-pink-700">3.31</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Results Banner & Live Guidelines Plot -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- Dynamic Live Classification Panel -->
+                    <div id="prediction-result-card" class="rounded-3xl border border-purple-100 bg-white p-6 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300 shadow-xl shadow-purple-950/5">
+                        <div class="space-y-3 w-full md:w-3/5">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-purple-100 text-purple-600">
+                                🌸 실시간 붓꽃 탐지기
+                            </span>
+                            <h4 class="text-xs font-semibold text-slate-400">데이터를 분석한 AI의 예측 결과:</h4>
+                            <div class="space-y-1">
+                                <div id="predicted-species-name" class="text-3xl font-black text-purple-700 leading-tight">분석 대기 중</div>
+                                <div id="prediction-match-rate" class="text-xs text-purple-500 font-bold">확률 산출 중...</div>
+                            </div>
+                            <p id="species-story-excerpt" class="text-slate-600 text-xs leading-relaxed font-medium">
+                                슬라이더를 미세조정하면 붓꽃 유전자 분포 가이드라인에 대입되어 실시간으로 어떤 종인지 자연사적 맥락과 함께 즉시 팝업 해설됩니다.
+                            </p>
+                        </div>
+                        <div class="w-full md:w-2/5 flex flex-col items-center justify-center p-4 bg-purple-50/30 rounded-2xl border border-purple-100/50">
+                            <!-- Beautiful dynamic flower scale animator -->
+                            <div id="dynamic-flower-preview" class="w-28 h-28 flex items-center justify-center transition-transform duration-300">
+                                <!-- SVGs dynamically drawn in JS -->
+                            </div>
+                            <span class="text-[10px] text-purple-400 font-bold tracking-widest mt-2 uppercase">BOTANICAL SCALE</span>
+                        </div>
+                    </div>
+
+                    <!-- Guidelines Scatter Plot (PDF Page 6 완벽 구현) -->
+                    <div class="rounded-3xl border border-purple-100 bg-white p-5 space-y-3 shadow-md">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-50/55 pb-3">
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                                    꽃잎 평면 분류 가이드라인 산점도 <span class="text-xs font-normal text-purple-400">(PDF Page 6)</span>
+                                </h4>
+                                <p class="text-[10px] text-slate-400">가이드라인 선: 꽃잎 길이 경계 2.5cm(세로 회색선) / 꽃잎 너비 경계 1.6cm(가로 빨간선)</p>
+                            </div>
+                            <div class="flex items-center gap-3 text-[10px] font-bold">
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Setosa</span>
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-violet-400"></span> Versicolor</span>
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span> Virginica</span>
+                            </div>
+                        </div>
+
+                        <!-- Scatter Canvas Container -->
+                        <div class="relative w-full bg-slate-50/50 rounded-2xl border border-purple-50 overflow-hidden flex items-center justify-center">
+                            <canvas id="scatter-plot-canvas" class="w-full h-auto aspect-[4/3] block touch-none"></canvas>
+                        </div>
+                        
+                        <div class="flex justify-between text-[10px] text-slate-400 px-1 font-semibold">
+                            <span>가로축: 꽃잎 길이 (Petal Length, 1.0 ~ 7.0cm)</span>
+                            <span>세로축: 꽃잎 너비 (Petal Width, 0.1 ~ 2.5cm)</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 3: STATISTICAL MYSTERY ==================== -->
+        <section id="tab-data" class="tab-content hidden space-y-8 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Simpson's Paradox Explanation & Live Toggle Chart -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="rounded-3xl border border-purple-100 bg-white p-6 space-y-4 shadow-xl">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-50 text-amber-600 border border-amber-100">
+                                    💡 심슨의 역설 증명
+                                </span>
+                                <h3 class="text-lg font-bold text-slate-800 mt-1">집단의 신비: 심슨의 역설 <span class="text-xs font-normal text-slate-400">(Simpson's Paradox)</span></h3>
+                            </div>
+                            
+                            <!-- Soft Toggle button mode -->
+                            <div class="flex bg-purple-50/80 p-1 rounded-xl border border-purple-100 text-xs">
+                                <button onclick="toggleSimpsonMode('all')" id="simpson-btn-all" class="px-4 py-2 rounded-lg font-bold transition-all bg-white text-purple-700 shadow-sm">
+                                    통합 데이터
+                                </button>
+                                <button onclick="toggleSimpsonMode('species')" id="simpson-btn-species" class="px-4 py-2 rounded-lg font-bold transition-all text-purple-400 hover:text-purple-700">
+                                    품종별 분리
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-600 text-xs leading-relaxed font-medium">
+                            전체 붓꽃 데이터를 뭉뚱그려 보면 꽃받침 길이와 너비는 <strong class="text-rose-500">음(-)의 상관관계 (r ≈ -0.12)</strong>인 것처럼 잘못 착시가 발생합니다. 하지만 품종별로 그룹화(Groupby)하여 자세히 들여다보면 각 품종 내부에서는 강력한 <strong class="text-emerald-500">양(+)의 상관관계</strong>로 돌아섭니다! 이것이 통계적 심슨의 역설입니다.
+                        </p>
+
+                        <!-- Canvas for Simpson Plot -->
+                        <div class="relative w-full bg-slate-50/50 rounded-2xl border border-purple-50 overflow-hidden">
+                            <canvas id="simpson-canvas" class="w-full h-auto aspect-[16/10.5] block"></canvas>
+                        </div>
+
+                        <div class="flex justify-between items-center text-[10px] text-slate-400 px-1 font-semibold">
+                            <span>가로축: 꽃받침 길이 (Sepal Length)</span>
+                            <span>세로축: 꽃받침 너비 (Sepal Width)</span>
+                            <span id="correlation-coefficient-badge" class="px-2.5 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-full font-bold">전체 상관계수: r ≈ -0.12 (음의 착시)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Heatmaps: Overall & Species-specific (PDF Pages 2, 3, 4, 5 완벽 구현) -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="rounded-3xl border border-purple-100 bg-white p-6 space-y-6 shadow-xl relative overflow-hidden">
+                        <div class="absolute -bottom-16 -right-16 w-32 h-32 bg-pink-100/30 rounded-full blur-2xl pointer-events-none"></div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-pink-400 sway-flower" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4M6,12A2,2 0 0,1 8,10A2,2 0 0,1 10,12A2,2 0 0,1 8,14A2,2 0 0,1 6,12M12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20M18,12A2,2 0 0,1 16,14A2,2 0 0,1 14,12A2,2 0 0,1 16,10A2,2 0 0,1 18,12Z" />
+                                </svg>
+                                상관관계 매트릭스 열지도 <span class="text-xs text-slate-400 font-normal">(Heatmap)</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">상단 토글을 클릭해 품종별 독립적 구조(Setosa, Versicolor, Virginica) 히트맵을 한눈에 변환하며 분석해 보세요!</p>
+                        </div>
+
+                        <!-- Heatmap Type Selector -->
+                        <div class="grid grid-cols-4 bg-purple-50/70 p-1 rounded-xl border border-purple-100/80 text-[11px] font-bold text-center">
+                            <button onclick="switchHeatmap('overall')" id="heatmap-btn-overall" class="py-1.5 rounded-lg transition-all bg-white text-purple-700 shadow-sm">전체 데이터</button>
+                            <button onclick="switchHeatmap('setosa')" id="heatmap-btn-setosa" class="py-1.5 rounded-lg transition-all text-purple-400">Setosa</button>
+                            <button onclick="switchHeatmap('versicolor')" id="heatmap-btn-versicolor" class="py-1.5 rounded-lg transition-all text-purple-400">Versicolor</button>
+                            <button onclick="switchHeatmap('virginica')" id="heatmap-btn-virginica" class="py-1.5 rounded-lg transition-all text-purple-400">Virginica</button>
+                        </div>
+
+                        <!-- Heatmap Grid -->
+                        <div class="space-y-4">
+                            <!-- Column Labels -->
+                            <div class="grid grid-cols-5 text-center text-[10px] font-bold text-slate-400">
+                                <div>구분</div>
+                                <div>꽃받침L</div>
+                                <div>꽃받침W</div>
+                                <div>꽃잎L</div>
+                                <div>꽃잎W</div>
+                            </div>
+
+                            <!-- Heatmap Rows Placeholder (drawn dynamically via JS) -->
+                            <div id="heatmap-cells-container" class="space-y-2">
+                                <!-- JS draws beautiful pastel dynamic grid cells here -->
+                            </div>
+                        </div>
+
+                        <!-- Description Details Card -->
+                        <div id="heatmap-info-card" class="p-4 bg-gradient-to-tr from-purple-50/30 via-pink-50/10 to-indigo-50/20 rounded-2xl border border-purple-150 space-y-2">
+                            <h4 id="heatmap-cell-title" class="text-xs font-bold text-purple-700 uppercase tracking-wider">💡 데이터 상관성 상세 탐색</h4>
+                            <p class="text-[10px] text-slate-400 font-bold">상관계수 수치: <span id="heatmap-cell-val" class="font-mono text-xs text-purple-600">r ≈ 1.00</span></p>
+                            <p id="heatmap-cell-desc" class="text-xs text-slate-600 leading-relaxed font-medium">
+                                히트맵 격자의 셀을 마우스로 클릭해 보세요! 해당 변수 간 수치가 왜 양(+) 또는 음(-)의 형태가 나타나는지 데이터적/생물학적 의미를 상세 분석해 드립니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-purple-100 bg-white/50 backdrop-blur-md py-6 text-center text-xs text-slate-400 font-semibold">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2026 붓꽃 연대기 (The Iris Chronicles) Project. All rights reserved.</p>
+            <p>Designed with Floral Botanical Expressive UI Paradigm & Real PDF Data Integration</p>
+        </div>
+    </footer>
+
+    <!-- DATA & INTERACTIVE LOGIC -->
+    <script>
+        // Tab system
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-purple-400 hover:text-purple-700";
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.className = "tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 bg-white text-purple-700 shadow-sm";
+
+            // Draw layouts
+            if (tabId === 'story') {
+                setTimeout(drawStoryCharts, 50);
+            } else if (tabId === 'classifier') {
+                setTimeout(updatePredictor, 50);
+            } else if (tabId === 'data') {
+                setTimeout(() => {
+                    drawSimpsonPlot(currentSimpsonMode);
+                    switchHeatmap(currentHeatmapType);
+                }, 50);
+            }
+        }
+
+        // --- NEW: INTERACTIVE BOTANICAL ANATOMIST LOGIC ---
+        function clickAnatomy(part) {
+            const panel = document.getElementById('anatomy-info-panel');
+            
+            // Highlight SVG colors temporarily
+            const sepalPaths = [document.getElementById('svg-sepal-l'), document.getElementById('svg-sepal-r'), document.getElementById('svg-sepal-b')];
+            const petalPaths = [document.getElementById('svg-petal-c'), document.getElementById('svg-petal-l'), document.getElementById('svg-petal-r')];
+
+            // Reset
+            sepalPaths.forEach(p => p.classList.replace('fill-purple-400', 'fill-purple-300'));
+            petalPaths.forEach(p => p.classList.replace('fill-indigo-500', 'fill-indigo-300'));
+
+            if (part === 'sepal') {
+                // Highlight Sepal paths
+                sepalPaths.forEach(p => p.classList.add('fill-purple-400'));
+                
+                panel.innerHTML = `
+                    <div class="space-y-2 animate-fade-in">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 text-xs font-bold bg-purple-100 text-purple-700 rounded-full border border-purple-200">구조 명칭: 꽃받침 (Sepal)</span>
+                            <span class="text-xs text-slate-400 font-bold">바깥쪽 3장</span>
+                        </div>
+                        <h4 class="text-lg font-extrabold text-purple-800">🍂 벌들의 수분 활주로이자 든든한 바람막이</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            우리가 붓꽃을 볼 때 바깥쪽으로 부드럽게 늘어지며 화려하게 펼쳐져 있는 큰 꽃잎 무리가 사실은 <strong>꽃받침(Sepal)</strong>입니다. 
+                        </p>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            생물학적으로 이는 꿀을 따러 오는 곤충들이 안전하게 착지할 수 있는 '착륙 비행패드' 역할을 하며, 세토사의 경우 가혹한 알래스카 기후에 맞춰 가로폭이 매우 넓고 단단하게 진화(평균 3.43cm)했습니다. 반면 버지니카는 호박벌의 하중을 견딜 수 있도록 위아래로 길쭉한 슬림 구조를 설계했습니다.
+                        </p>
+                        <div class="pt-2 flex gap-4 text-[11px] text-purple-700 font-bold">
+                            <span>📊 Setosa 세로폭 평균: 5.01 cm</span>
+                            <span>📊 Setosa 가로폭 평균: 3.43 cm</span>
+                        </div>
+                    </div>
+                `;
+            } else if (part === 'petal') {
+                // Highlight Petal paths
+                petalPaths.forEach(p => p.classList.add('fill-indigo-500'));
+
+                panel.innerHTML = `
+                    <div class="space-y-2 animate-fade-in">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 text-xs font-bold bg-indigo-100 text-indigo-700 rounded-full border border-indigo-200">구조 명칭: 안쪽 꽃잎 (Petal)</span>
+                            <span class="text-xs text-slate-400 font-bold">안쪽 곧은 3장</span>
+                        </div>
+                        <h4 class="text-lg font-extrabold text-indigo-800">🌸 핵심 유전 형질이 집중된 붓꽃의 정체성</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            꽃 안쪽에서 왕관처럼 고고하게 하늘을 향해 곧추서 있는 화사한 부위가 바로 진짜 <strong>꽃잎(Petal)</strong>입니다.
+                        </p>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            머신러닝과 통계학에서 품종을 정밀 분류할 때 가장 먼저 확인하는 1순위 핵심 지표입니다. 세토사는 이 꽃잎의 길이가 불과 1.4cm 내외로 극히 조그마하여 한눈에 잡종들과 분리되는 특징을 보입니다. 반대로 버지니카는 곤충들을 멀리서 매료시키고자 꽃잎을 5.5cm 이상 거대하게 증폭시켰습니다.
+                        </p>
+                        <div class="pt-2 flex gap-4 text-[11px] text-indigo-700 font-bold">
+                            <span>📊 Setosa 꽃잎 평균 길이: 1.46 cm</span>
+                            <span>📊 Virginica 꽃잎 평균 길이: 5.55 cm</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // --- NEW: AUTO PRESET SIMULATOR ---
+        function applyPreset(sl, sw, pl, pw) {
+            // Set slider values smoothly
+            document.getElementById('slider-sepal-l').value = sl;
+            document.getElementById('slider-sepal-w').value = sw;
+            document.getElementById('slider-petal-l').value = pl;
+            document.getElementById('slider-petal-w').value = pw;
+
+            // Trigger prediction update with visual effect
+            updatePredictor();
+
+            // Highlight active feedback
+            const card = document.getElementById('prediction-result-card');
+            card.classList.add('scale-102', 'ring-2', 'ring-purple-300');
+            setTimeout(() => {
+                card.classList.remove('scale-102', 'ring-2', 'ring-purple-300');
+            }, 500);
+        }
+
+        // --- NEW: STORY CARD ACCORDION LOGIC ---
+        function toggleStoryCard(cardId) {
+            const isHidden = document.getElementById(`${cardId}-full`).classList.contains('hidden');
+            
+            // Hide all stories first
+            document.getElementById('setosa-story-full').classList.add('hidden');
+            document.getElementById('versicolor-story-full').classList.add('hidden');
+            document.getElementById('virginica-story-full').classList.add('hidden');
+            
+            document.getElementById('setosa-story-brief').classList.remove('hidden');
+            document.getElementById('versicolor-story-brief').classList.remove('hidden');
+            document.getElementById('virginica-story-brief').classList.remove('hidden');
+
+            document.getElementById('setosa-story-arrow').innerText = "자세히 보기 🔓";
+            document.getElementById('versicolor-story-arrow').innerText = "자세히 보기 🔓";
+            document.getElementById('virginica-story-arrow').innerText = "자세히 보기 🔓";
+
+            // If it was hidden, show it
+            if (isHidden) {
+                document.getElementById(`${cardId}-full`).classList.remove('hidden');
+                document.getElementById(`${cardId}-brief`).classList.add('hidden');
+                document.getElementById(`${cardId}-arrow`).innerText = "스토리 닫기 🔒";
+            }
+        }
+
+        // --- PDF REAL DATA DEFINITION ---
+        const pdfData = {
+            // Sepal length average (PDF page 1)
+            sepalLengthAverages: {
+                setosa: 5.01,
+                versicolor: 5.94,
+                virginica: 6.59
+            },
+            // Petal length/width golden ratio boxplot data (PDF page 7)
+            goldenRatioRanges: {
+                setosa: { min: 2.7, q1: 4.7, median: 7.0, q3: 7.5, max: 11.0, outliers: [14.0, 15.0] },
+                versicolor: { min: 2.7, q1: 3.0, median: 3.3, q3: 3.4, max: 4.1, outliers: [] },
+                virginica: { min: 2.1, q1: 2.5, median: 2.8, q3: 3.1, max: 4.0, outliers: [] }
+            },
+            // Multi-species Heatmap matrix values (Pages 2, 3, 4, 5)
+            heatmaps: {
+                overall: {
+                    title: "전체 데이터 상관관계 (Page 2)",
+                    matrix: [
+                        [1.0, -0.12, 0.87, 0.82],
+                        [-0.12, 1.0, -0.43, -0.37],
+                        [0.87, -0.43, 1.0, 0.96],
+                        [0.82, -0.37, 0.96, 1.0]
+                    ],
+                    descs: [
+                        ["자기 자신과의 완벽한 상관성입니다.", "전체 붓꽃을 통틀면 약한 반비례 기운을 띱니다. 그러나 이는 심슨의 역설에 따른 기형적 착시 현상입니다.", "전체 길이가 늘어날 때 꽃잎 뼈대 역시 매우 거대화함을 증명합니다.", "길이가 길수록 너비 역시 탄탄하게 불어남을 증명하는 양의 상관입니다."],
+                        ["전체 붓꽃을 통틀면 약한 반비례 기운을 띱니다. 그러나 이는 심슨의 역설에 따른 기형적 착시 현상입니다.", "자기 자신과의 완벽한 상관성입니다.", "중간 수준의 음의 관계입니다. 세토사종의 독특한 형태학(짧은 꽃잎, 넓은 꽃받침)에 기인합니다.", "꽃잎 부피 너비 증가와도 다소 상치하는 패턴이 나타납니다."],
+                        ["전체 길이가 늘어날 때 꽃잎 뼈대 역시 매우 거대화함을 증명합니다.", "중간 수준의 음의 관계입니다. 세토사종의 독특한 형태학(짧은 꽃잎, 넓은 꽃받침)에 기인합니다.", "자기 자신과의 완벽한 상관성입니다.", "0.96 이라는 극도의 양의 선형성을 보입니다. 꽃잎 길이와 너비는 한 몸처럼 비례 성장합니다."],
+                        ["길이가 길수록 너비 역시 탄탄하게 불어남을 증명하는 양의 상관입니다.", "꽃잎 부피 너비 증가와도 다소 상치하는 패턴이 나타납니다.", "0.96 이라는 극도의 양의 선형성을 보입니다. 꽃잎 길이와 너비는 한 몸처럼 비례 성장합니다.", "자기 자신과의 완벽한 상관성입니다."]
+                    ]
+                },
+                setosa: {
+                    title: "Setosa 상관관계 (Page 3)",
+                    matrix: [
+                        [1.0, 0.74, 0.27, 0.28],
+                        [0.74, 1.0, 0.18, 0.23],
+                        [0.27, 0.18, 1.0, 0.33],
+                        [0.28, 0.23, 0.33, 1.0]
+                    ],
+                    descs: [
+                        ["자기 자신과의 완벽한 상관성입니다.", "세토사는 전체 음의 착시와 달리, 내부에서는 0.74라는 고도의 양의 상관관계를 가져 세로성장 시 가로도 함께 통통하게 비례 성장합니다.", "꽃잎 길이 증가와는 다소 느슨한 연동성만 보여줍니다.", "꽃잎 너비 증가와 다소 느슨한 연동성을 보입니다."],
+                        ["세토사는 전체 음의 착시와 달리, 내부에서는 0.74라는 고도의 양의 상관관계를 가져 세로성장 시 가로도 함께 통통하게 비례 성장합니다.", "자기 자신과의 완벽한 상관성입니다.", "꽃받침 너비 팽창 시 꽃잎 길이 연계성은 미약합니다.", "꽃받침 너비와 꽃잎 두께 연동 역시 매우 느슨한 편입니다."],
+                        ["꽃잎 길이 증가와는 다소 느슨한 연동성만 보여줍니다.", "꽃받침 너비 팽창 시 꽃잎 길이 연계성은 미약합니다.", "자기 자신과의 완벽한 상관성입니다.", "세토사종 내에서는 꽃잎 길이와 너비 간 선형성이 전체(0.96)에 비해서는 약 0.33으로 느슨합니다. 원체 크기가 극소형에 수렴해 한계를 보이기 때문입니다."],
+                        ["꽃잎 너비 증가와 다소 느슨한 연동성을 보입니다.", "꽃받침 너비와 꽃잎 두께 연동 역시 매우 느슨한 편입니다.", "세토사종 내에서는 꽃잎 길이와 너비 간 선형성이 전체(0.96)에 비해서는 약 0.33으로 느슨합니다. 원체 크기가 극소형에 수렴해 한계를 보이기 때문입니다.", "자기 자신과의 완벽한 상관성입니다."]
+                    ]
+                },
+                versicolor: {
+                    title: "Versicolor 상관관계 (Page 4)",
+                    matrix: [
+                        [1.0, 0.53, 0.75, 0.55],
+                        [0.53, 1.0, 0.56, 0.66],
+                        [0.75, 0.56, 1.0, 0.79],
+                        [0.55, 0.66, 0.79, 1.0]
+                    ],
+                    descs: [
+                        ["자기 자신과의 완벽한 상관성입니다.", "버시컬러 내에서는 꽃받침 길이와 너비가 0.53의 강건한 양의 상관관계를 유지합니다. (심슨의 역설)", "꽃받침과 꽃잎 길이는 0.75의 강한 조율적 비례관계를 보이며 교잡종으로서 조화를 이룹니다.", "꽃잎의 가로 벌어짐과도 양호한 비례를 갖춥니다."],
+                        ["버시컬러 내에서는 꽃받침 길이와 너비가 0.53의 강건한 양의 상관관계를 유지합니다. (심슨의 역설)", "자기 자신과의 완벽한 상관성입니다.", "꽃받침 너비가 넓은 개체일수록 꽃잎 길이도 적정 비율 벌어집니다.", "꽃받침 너비와 꽃잎 두께가 0.66의 기분 좋은 동반 성장을 이룹니다."],
+                        ["꽃받침과 꽃잎 길이는 0.75의 강한 조율적 비례관계를 보이며 교잡종으로서 조화를 이룹니다.", "꽃받침 너비가 넓은 개체일수록 꽃잎 길이도 적정 비율 벌어집니다.", "자기 자신과의 완벽한 상관성입니다.", "0.79라는 탁월한 비례 균형을 가집니다. 꽃잎 가로세로의 조화가 교잡 후손의 성격입니다."],
+                        ["꽃잎의 가로 벌어짐과도 양호한 비례를 갖춥니다.", "꽃받침 너비와 꽃잎 두께가 0.66의 기분 좋은 동반 성장을 이룹니다.", "0.79라는 탁월한 비례 균형을 가집니다. 꽃잎 가로세로의 조화가 교잡 후손의 성격입니다.", "자기 자신과의 완벽한 상관성입니다."]
+                    ]
+                },
+                virginica: {
+                    title: "Virginica 상관관계 (Page 5)",
+                    matrix: [
+                        [1.0, 0.46, 0.86, 0.28],
+                        [0.46, 1.0, 0.40, 0.54],
+                        [0.86, 0.40, 1.0, 0.32],
+                        [0.28, 0.54, 0.32, 1.0]
+                    ],
+                    descs: [
+                        ["자기 자신과의 완벽한 상관성입니다.", "대형 여왕종 역시 0.46이라는 중상 수준의 독립 양의 상관으로 비례 형태학적 규칙을 지지합니다.", "꽃받침 뼈대가 거대해지면 내부 꽃잎 뼈대 길이 역시 0.86이라는 극단의 정비례 팽창이 일어납니다.", "길이 팽창에 비해 가로폭 팽창의 연동성은 다소 느슨합니다."],
+                        ["대형 여왕종 역시 0.46이라는 중상 수준의 독립 양의 상관으로 비례 형태학적 규칙을 지지합니다.", "자기 자신과의 완벽한 상관성입니다.", "꽃받침의 너비가 넉넉할수록 꽃잎의 총 길이도 커지는 경향을 띱니다.", "꽃받침과 꽃잎 너비가 0.54 비례 연계를 띠며 두터운 꽃 모양을 연출합니다."],
+                        ["꽃받침 뼈대가 거대해지면 내부 꽃잎 뼈대 길이 역시 0.86이라는 극단의 정비례 팽창이 일어납니다.", "꽃받침의 너비가 넉넉할수록 꽃잎의 총 길이도 커지는 경향을 띱니다.", "자기 자신과의 완벽한 상관성입니다.", "길이가 길어질 때 너비가 함께 늘어나지만(0.32), 타 품종에 비해서는 완벽하게 얄상하게 위아래로 뻗은 형태를 가졌습니다."],
+                        ["길이 팽창에 비해 가로폭 팽창의 연동성은 다소 느슨합니다.", "꽃받침과 꽃잎 너비가 0.54 비례 연계를 띠며 두터운 꽃 모양을 연출합니다.", "길이가 길어질 때 너비가 함께 늘어나지만(0.32), 타 품종에 비해서는 완벽하게 얄상하게 위아래로 뻗은 형태를 가졌습니다.", "자기 자신과의 완벽한 상관성입니다."]
+                    ]
+                }
+            }
+        };
+
+        // --- ARTWORK GENERATION (CANVAS PLOTS) ---
+
+        // Draw PDF Page 1 Bar chart
+        function drawBarChart() {
+            const canvas = document.getElementById('bar-chart-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const r = canvas.getBoundingClientRect();
+            canvas.width = r.width * 2;
+            canvas.height = r.height * 2;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0,0,w,h);
+
+            const paddingLeft = w * 0.12;
+            const paddingRight = w * 0.05;
+            const paddingTop = h * 0.12;
+            const paddingBottom = h * 0.18;
+            const plotW = w - paddingLeft - paddingRight;
+            const plotH = h - paddingTop - paddingBottom;
+
+            // Draw Grid Y
+            ctx.strokeStyle = '#F3E8FF';
+            ctx.lineWidth = 2;
+            ctx.fillStyle = '#94A3B8';
+            ctx.font = 'bold 20px Noto Sans KR';
+
+            for (let i = 0; i <= 7; i += 1) {
+                const sy = paddingTop + plotH - (i / 7) * plotH;
+                ctx.beginPath();
+                ctx.moveTo(paddingLeft, sy);
+                ctx.lineTo(paddingLeft + plotW, sy);
+                ctx.stroke();
+                ctx.fillText(`${i}`, paddingLeft - 45, sy + 7);
+            }
+
+            // Labels
+            ctx.fillStyle = '#6B7280';
+            ctx.font = 'bold 20px Noto Sans KR';
+            ctx.fillText('꽃받침 길이 평균 (cm)', paddingLeft - 50, paddingTop - 25);
+
+            // Draw Bars with beautiful pastel gradients
+            const species = [
+                { name: 'setosa', val: pdfData.sepalLengthAverages.setosa, from: '#10B981', to: '#34D399', bg: '#ECFDF5' },
+                { name: 'versicolor', val: pdfData.sepalLengthAverages.versicolor, from: '#6366F1', to: '#818CF8', bg: '#EEF2FF' },
+                { name: 'virginica', val: pdfData.sepalLengthAverages.virginica, from: '#EC4899', to: '#F472B6', bg: '#FDF2F8' }
+            ];
+
+            const barW = plotW * 0.18;
+            const gap = (plotW - barW * 3) / 4;
+
+            species.forEach((s, idx) => {
+                const sx = paddingLeft + gap + idx * (barW + gap);
+                const barH = (s.val / 7) * plotH;
+                const sy = paddingTop + plotH - barH;
+
+                // Rounded Top Bar
+                const grad = ctx.createLinearGradient(sx, sy, sx, sy + barH);
+                grad.addColorStop(0, s.from);
+                grad.addColorStop(1, s.to);
+                
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.roundRect(sx, sy, barW, barH, [16, 16, 0, 0]);
+                ctx.fill();
+
+                // Draw outline
+                ctx.strokeStyle = s.from;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Draw Text value on top
+                ctx.fillStyle = '#1F2937';
+                ctx.font = 'black 24px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(`${s.val.toFixed(2)} cm`, sx + barW / 2, sy - 15);
+
+                // Draw species label
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 22px Inter';
+                ctx.fillText(s.name, sx + barW / 2, paddingTop + plotH + 40);
+            });
+            ctx.textAlign = 'left'; // reset
+        }
+
+        // Draw PDF Page 7 Box Plot for golden ratios
+        function drawBoxPlot() {
+            const canvas = document.getElementById('box-plot-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const r = canvas.getBoundingClientRect();
+            canvas.width = r.width * 2;
+            canvas.height = r.height * 2;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0,0,w,h);
+
+            const paddingLeft = w * 0.12;
+            const paddingRight = w * 0.05;
+            const paddingTop = h * 0.12;
+            const paddingBottom = h * 0.18;
+            const plotW = w - paddingLeft - paddingRight;
+            const plotH = h - paddingTop - paddingBottom;
+
+            const yMin = 0.0;
+            const yMax = 16.0;
+
+            function toY(val) {
+                return paddingTop + plotH - ((val - yMin) / (yMax - yMin)) * plotH;
+            }
+
+            // Grid lines Y
+            ctx.strokeStyle = '#FDF2F8';
+            ctx.lineWidth = 2;
+            ctx.fillStyle = '#94A3B8';
+            ctx.font = 'bold 20px Noto Sans KR';
+
+            for (let i = 0; i <= 16; i += 2) {
+                const sy = toY(i);
+                ctx.beginPath();
+                ctx.moveTo(paddingLeft, sy);
+                ctx.lineTo(paddingLeft + plotW, sy);
+                ctx.stroke();
+                ctx.fillText(`${i}`, paddingLeft - 45, sy + 7);
+            }
+
+            ctx.fillStyle = '#6B7280';
+            ctx.font = 'bold 20px Noto Sans KR';
+            ctx.fillText('꽃잎 가로세로 비율 (길이/너비)', paddingLeft - 50, paddingTop - 25);
+
+            const boxes = [
+                { name: 'setosa', stats: pdfData.goldenRatioRanges.setosa, color: '#10B981', light: '#ECFDF5' },
+                { name: 'versicolor', stats: pdfData.goldenRatioRanges.versicolor, color: '#6366F1', light: '#EEF2FF' },
+                { name: 'virginica', stats: pdfData.goldenRatioRanges.virginica, color: '#EC4899', light: '#FDF2F8' }
+            ];
+
+            const boxW = plotW * 0.18;
+            const gap = (plotW - boxW * 3) / 4;
+
+            boxes.forEach((b, idx) => {
+                const sx = paddingLeft + gap + idx * (boxW + gap);
+                const xCenter = sx + boxW / 2;
+
+                const s = b.stats;
+                const syMin = toY(s.min);
+                const syQ1 = toY(s.q1);
+                const syMedian = toY(s.median);
+                const syQ3 = toY(s.q3);
+                const syMax = toY(s.max);
+
+                // Draw whiskers line
+                ctx.strokeStyle = b.color;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(xCenter, syMin);
+                ctx.lineTo(xCenter, syMax);
+                ctx.stroke();
+
+                // Draw horizontal whiskers caps
+                ctx.beginPath();
+                ctx.moveTo(xCenter - 25, syMin); ctx.lineTo(xCenter + 25, syMin);
+                ctx.moveTo(xCenter - 25, syMax); ctx.lineTo(xCenter + 25, syMax);
+                ctx.stroke();
+
+                // Draw Box
+                ctx.fillStyle = b.light;
+                ctx.beginPath();
+                ctx.roundRect(sx, syQ3, boxW, Math.abs(syQ1 - syQ3), [8]);
+                ctx.fill();
+                ctx.stroke();
+
+                // Draw Median line
+                ctx.strokeStyle = '#1F2937';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(sx, syMedian);
+                ctx.lineTo(sx + boxW, syMedian);
+                ctx.stroke();
+
+                // Draw Outliers if any
+                s.outliers.forEach(out => {
+                    const soutY = toY(out);
+                    ctx.fillStyle = '#F59E0B'; // Gold outliers
+                    ctx.beginPath();
+                    ctx.arc(xCenter, soutY, 7, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                });
+
+                // X Labels
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 22px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(b.name, xCenter, paddingTop + plotH + 40);
+            });
+            ctx.textAlign = 'left';
+        }
+
+        // Trigger both Story tab diagrams
+        function drawStoryCharts() {
+            drawBarChart();
+            drawBoxPlot();
+        }
+
+        // --- REAL HISTORICAL SPECIES LIST SIMULATION ---
+        const irisData = { setosa: [], versicolor: [], virginica: [] };
+        function generateDataset() {
+            // Re-generate consistent realistic distributions aligned with Simpson's paradox page 5
+            for (let i = 0; i < 50; i++) {
+                // Setosa: high SW, low SL, small Petals
+                const sl = 4.3 + Math.random() * 1.5;
+                const sw = 2.9 + Math.random() * 1.4;
+                const pl = 1.0 + Math.random() * 0.9;
+                const pw = 0.1 + Math.random() * 0.5;
+                irisData.setosa.push({sepalL: sl, sepalW: sw, petalL: pl, petalW: pw});
+            }
+            for (let i = 0; i < 50; i++) {
+                // Versicolor: balanced middle values
+                const sl = 4.9 + Math.random() * 2.1;
+                const sw = 2.0 + Math.random() * 1.4;
+                const pl = 3.0 + Math.random() * 2.1;
+                const pw = 1.0 + Math.random() * 0.8;
+                irisData.versicolor.push({sepalL: sl, sepalW: sw, petalL: pl, petalW: pw});
+            }
+            for (let i = 0; i < 50; i++) {
+                // Virginica: long SL, low SW relative, giant Petals
+                const sl = 4.9 + Math.random() * 3.0;
+                const sw = 2.2 + Math.random() * 1.6;
+                const pl = 4.5 + Math.random() * 2.4;
+                const pw = 1.4 + Math.random() * 1.1;
+                irisData.virginica.push({sepalL: sl, sepalW: sw, petalL: pl, petalW: pw});
+            }
+        }
+        generateDataset();
+
+        // --- DYNAMIC SLIDER ENGINE & MODEL SIMULATION ---
+        function updatePredictor() {
+            const sepalL = parseFloat(document.getElementById('slider-sepal-l').value);
+            const sepalW = parseFloat(document.getElementById('slider-sepal-w').value);
+            const petalL = parseFloat(document.getElementById('slider-petal-l').value);
+            const petalW = parseFloat(document.getElementById('slider-petal-w').value);
+
+            document.getElementById('val-sepal-l').innerText = `${sepalL.toFixed(1)} cm`;
+            document.getElementById('val-sepal-w').innerText = `${sepalW.toFixed(1)} cm`;
+            document.getElementById('val-petal-l').innerText = `${petalL.toFixed(1)} cm`;
+            document.getElementById('val-petal-w').innerText = `${petalW.toFixed(1)} cm`;
+
+            const sepalRatio = sepalL / sepalW;
+            const petalRatio = petalL / petalW;
+
+            document.getElementById('derived-sepal-ratio').innerText = sepalRatio.toFixed(2);
+            document.getElementById('derived-petal-ratio').innerText = petalRatio.toFixed(2);
+
+            let predicted = "Setosa";
+            let prob = 98;
+            let themeBg = "bg-emerald-50/70 border-emerald-200/60 shadow-emerald-100/30";
+            let textAccent = "text-emerald-600";
+            let svgGraphic = "";
+            let description = "";
+
+            // Dynamic rule-based classification mimicking Page 7 PDF multi-feature criteria
+            if (petalL < 2.5) {
+                predicted = "세토사 (Setosa)";
+                prob = Math.max(89, Math.round(100 - (petalL / 2.5) * 11));
+                themeBg = "bg-emerald-50/70 border-emerald-200/60 shadow-emerald-100/30";
+                textAccent = "text-emerald-600";
+                svgGraphic = `
+                    <svg class="w-20 h-20 text-emerald-400 sway-flower" viewBox="0 0 64 64" fill="currentColor">
+                        <path d="M32 32 C10 32, 12 48, 32 58 C52 48, 54 32, 32 32 Z" class="text-emerald-500/20" />
+                        <path d="M32 32 C12 24, 6 12, 14 6 C24 0, 32 16, 32 32 Z" class="text-emerald-500/10" />
+                        <circle cx="32" cy="32" r="5" class="text-emerald-400" />
+                        <path d="M32 32 L32 22" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                `;
+                description = "🥶 **가장 작고 통통한 고위도의 생존자**: 매서운 냉해 바람이 휘몰아치는 알래스카 및 캐나다 산지에서 에너지를 지키고자 꽃잎의 부피는 작게 웅크리고 꽃받침 폭은 넓게 조화시킨 세토사 계열 수치입니다!";
+            } else {
+                // PDF page 7 multi-feature condition: Petal length >= 4.8 and SepalRatio >= 2.05 -> Virginica
+                if (petalL >= 4.8 && sepalRatio >= 2.05) {
+                    predicted = "버지니카 (Virginica)";
+                    prob = Math.min(99, Math.round(85 + (petalL - 4.8) * 5 + (sepalRatio - 2.05) * 10));
+                    themeBg = "bg-pink-50/70 border-pink-200/60 shadow-pink-100/30";
+                    textAccent = "text-pink-600";
+                    svgGraphic = `
+                        <svg class="w-20 h-20 text-pink-400 sway-flower" viewBox="0 0 64 64" fill="currentColor">
+                            <path d="M32 32 C12 32, 10 38, 32 60 C54 38, 52 32, 32 32 Z" class="text-pink-500/25" />
+                            <path d="M32 32 C10 18, 4 4, 16 2 C28 0, 32 20, 32 32 Z" class="text-pink-600/15" />
+                            <circle cx="32" cy="32" r="8.5" class="text-pink-300" />
+                            <path d="M32 32 L32 10" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                        </svg>
+                    `;
+                    description = "👑 **따뜻한 늪지의 왕관 여왕**: 따뜻한 미국 남부의 풍요로운 영양 조건에 알맞게 대형 벌들과 빛을 효율적으로 갈취하기 위해 거대화한 버지니카 판정입니다! 꽃받침 비율이 2.05 이상인 위아래 얄상한 형태가 뚜렷합니다.";
+                } else {
+                    predicted = "버시컬러 (Versicolor)";
+                    prob = Math.round(75 + Math.random() * 15);
+                    themeBg = "bg-violet-50/70 border-violet-200/60 shadow-violet-100/30";
+                    textAccent = "text-violet-600";
+                    svgGraphic = `
+                        <svg class="w-20 h-20 text-violet-400 sway-flower" viewBox="0 0 64 64" fill="currentColor">
+                            <path d="M32 32 C15 32, 18 42, 32 54 C46 42, 49 32, 32 32 Z" class="text-violet-500/20" />
+                            <path d="M32 32 C15 22, 10 10, 18 5 C26 0, 32 18, 32 32 Z" class="text-violet-500/10" />
+                            <circle cx="32" cy="32" r="6.5" class="text-violet-300" />
+                            <path d="M32 32 L32 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    `;
+                    description = "🧬 **자연 교잡종의 황금 조율**: 세토사와 버지니카가 빙하기 시대 남북의 장막을 걷어내고 역사적 교배로 만들어낸 버시컬러입니다. 꽃잎 길이 4.5~5.2cm의 자칫 혼돈을 주는 구간에서 통통한 꽃받침을 입증해 완벽 격리됩니다.";
+                }
+            }
+
+            const resultCard = document.getElementById('prediction-result-card');
+            resultCard.className = `rounded-3xl border p-6 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300 shadow-xl ${themeBg}`;
+            
+            document.getElementById('predicted-species-name').innerText = predicted;
+            document.getElementById('predicted-species-name').className = `text-3xl font-black ${textAccent} leading-tight`;
+            document.getElementById('prediction-match-rate').innerText = `매칭 유전자 신뢰도: ${prob}%`;
+            document.getElementById('prediction-match-rate').className = `text-xs font-bold ${textAccent}`;
+            document.getElementById('species-story-excerpt').innerHTML = description;
+            
+            document.getElementById('dynamic-flower-preview').innerHTML = svgGraphic;
+
+            drawScatterPlot(petalL, petalW);
+        }
+
+        // --- DRAWING: SCATTER PLOT WITH PDF CORRIDORS (PAGE 6) ---
+        function drawScatterPlot(userX = null, userY = null) {
+            const canvas = document.getElementById('scatter-plot-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0,0,w,h);
+
+            const xMin = 1.0;
+            const xMax = 7.0;
+            const yMin = 0.0;
+            const yMax = 2.6;
+
+            const padding = w * 0.12;
+            const plotW = w - padding * 2;
+            const plotH = h - padding * 2;
+
+            function toScreenX(val) {
+                return padding + ((val - xMin) / (xMax - xMin)) * plotW;
+            }
+            function toScreenY(val) {
+                return padding + plotH - ((val - yMin) / (yMax - yMin)) * plotH;
+            }
+
+            // Draw gridlines
+            ctx.strokeStyle = '#F3E8FF';
+            ctx.lineWidth = 1.5;
+            ctx.font = '22px Inter';
+            ctx.fillStyle = '#94A3B8';
+
+            for (let x = 1.0; x <= 7.0; x += 1.0) {
+                const sx = toScreenX(x);
+                ctx.beginPath();
+                ctx.moveTo(sx, padding);
+                ctx.lineTo(sx, padding + plotH);
+                ctx.stroke();
+                ctx.fillText(`${x.toFixed(1)}`, sx - 15, padding + plotH + 35);
+            }
+
+            for (let y = 0.0; y <= 2.6; y += 0.5) {
+                const sy = toScreenY(y);
+                ctx.beginPath();
+                ctx.moveTo(padding, sy);
+                ctx.lineTo(padding + plotW, sy);
+                ctx.stroke();
+                ctx.fillText(`${y.toFixed(1)}`, padding - 55, sy + 7);
+            }
+
+            // Scatter dots background
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.45)';
+            irisData.setosa.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(toScreenX(p.petalL), toScreenY(p.petalW), 9, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.fillStyle = 'rgba(139, 92, 246, 0.45)';
+            irisData.versicolor.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(toScreenX(p.petalL), toScreenY(p.petalW), 9, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.fillStyle = 'rgba(236, 72, 153, 0.45)';
+            irisData.virginica.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(toScreenX(p.petalL), toScreenY(p.petalW), 9, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw PDF Page 6 Boundary Guidelines (Dashed lines)
+            // Vertical setosa boundary at x = 2.5
+            ctx.strokeStyle = '#94A3B8';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 8]);
+            ctx.beginPath();
+            ctx.moveTo(toScreenX(2.5), padding);
+            ctx.lineTo(toScreenX(2.5), padding + plotH);
+            ctx.stroke();
+
+            // Horizontal boundary at y = 1.6
+            ctx.strokeStyle = '#EF4444'; // Red line
+            ctx.beginPath();
+            ctx.moveTo(padding, toScreenY(1.6));
+            ctx.lineTo(padding + plotW, toScreenY(1.6));
+            ctx.stroke();
+            ctx.setLineDash([]); // Reset line dash
+
+            // Draw real-time user indicator
+            if (userX !== null && userY !== null) {
+                const targetX = toScreenX(userX);
+                const targetY = toScreenY(userY);
+
+                // Exterior beautiful target flower ring
+                ctx.strokeStyle = '#D946EF';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(targetX, targetY, 24, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(targetX, targetY, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#C084FC';
+                ctx.beginPath();
+                ctx.arc(targetX, targetY, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Coordinates label tooltip
+                ctx.fillStyle = '#1F2937';
+                ctx.font = 'bold 22px Inter';
+                ctx.fillText(`실시간 포인트: [${userX.toFixed(1)}, ${userY.toFixed(1)}]`, targetX + 25, targetY - 15);
+            }
+        }
+
+
+        // --- DRAWING: SIMPSON'S PARADOX VISUALIZER ---
+        let currentSimpsonMode = 'all';
+        function toggleSimpsonMode(mode) {
+            currentSimpsonMode = mode;
+            const btnAll = document.getElementById('simpson-btn-all');
+            const btnSpec = document.getElementById('simpson-btn-species');
+            const badge = document.getElementById('correlation-coefficient-badge');
+
+            if (mode === 'all') {
+                btnAll.className = "px-4 py-2 rounded-lg font-bold transition-all bg-white text-purple-700 shadow-sm";
+                btnSpec.className = "px-4 py-2 rounded-lg font-bold transition-all text-purple-400 hover:text-purple-700";
+                badge.innerText = "전체 상관계수: r ≈ -0.12 (음의 관계)";
+                badge.className = "px-2.5 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-full font-bold";
+            } else {
+                btnAll.className = "px-4 py-2 rounded-lg font-bold transition-all text-purple-400 hover:text-purple-700";
+                btnSpec.className = "px-4 py-2 rounded-lg font-bold transition-all bg-white text-purple-700 shadow-sm";
+                badge.innerText = "Setosa: r = 0.74 / Versicolor: r = 0.53 / Virginica: r = 0.46";
+                badge.className = "px-2.5 py-1 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full font-bold";
+            }
+            drawSimpsonPlot(mode);
+        }
+
+        function drawSimpsonPlot(mode) {
+            const canvas = document.getElementById('simpson-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0,0,w,h);
+
+            const slMin = 4.0;
+            const slMax = 8.0;
+            const swMin = 1.8;
+            const swMax = 4.5;
+
+            const padding = w * 0.1;
+            const plotW = w - padding * 2;
+            const plotH = h - padding * 2;
+
+            function toScreenX(sl) {
+                return padding + ((sl - slMin) / (slMax - slMin)) * plotW;
+            }
+            function toScreenY(sw) {
+                return padding + plotH - ((sw - swMin) / (swMax - swMin)) * plotH;
+            }
+
+            // Grid lines Y
+            ctx.strokeStyle = '#F3E8FF';
+            ctx.lineWidth = 1.5;
+            ctx.font = '20px Inter';
+            ctx.fillStyle = '#94A3B8';
+
+            for (let sl = 4.0; sl <= 8.0; sl += 1.0) {
+                const sx = toScreenX(sl);
+                ctx.beginPath();
+                ctx.moveTo(sx, padding);
+                ctx.lineTo(sx, padding + plotH);
+                ctx.stroke();
+                ctx.fillText(`${sl.toFixed(1)}`, sx - 15, padding + plotH + 30);
+            }
+
+            for (let sw = 2.0; sw <= 4.5; sw += 0.5) {
+                const sy = toScreenY(sw);
+                ctx.beginPath();
+                ctx.moveTo(padding, sy);
+                ctx.lineTo(padding + plotW, sy);
+                ctx.stroke();
+                ctx.fillText(`${sw.toFixed(1)}`, padding - 50, sy + 7);
+            }
+
+            if (mode === 'all') {
+                ctx.fillStyle = 'rgba(99, 102, 241, 0.45)';
+                // setosa
+                irisData.setosa.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(toScreenX(p.sepalL), toScreenY(p.sepalW), 9, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                // versicolor
+                irisData.versicolor.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(toScreenX(p.sepalL), toScreenY(p.sepalW), 9, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                // virginica
+                irisData.virginica.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(toScreenX(p.sepalL), toScreenY(p.sepalW), 9, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // overall negative trendline
+                ctx.strokeStyle = '#EF4444';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(toScreenX(4.4), toScreenY(3.4));
+                ctx.lineTo(toScreenX(7.6), toScreenY(2.8));
+                ctx.stroke();
+
+                ctx.fillStyle = '#EF4444';
+                ctx.font = 'bold 20px Noto Sans KR';
+                ctx.fillText('전체 데이터 역설적 하강선 (r ≈ -0.12)', toScreenX(5.6), toScreenY(2.7) - 20);
+
+            } else {
+                // Split clusters to prove Simpson's Paradox
+                // 1. Setosa (emerald)
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.6)';
+                irisData.setosa.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(toScreenX(p.sepalL), toScreenY(p.sepalW), 9, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.strokeStyle = '#10B981';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(toScreenX(4.3), toScreenY(2.9));
+                ctx.lineTo(toScreenX(5.8), toScreenY(4.1));
+                ctx.stroke();
+
+                // 2. Versicolor (violet/indigo)
+                ctx.fillStyle = 'rgba(139, 92, 246, 0.6)';
+                irisData.versicolor.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(toScreenX(p.sepalL), toScreenY(p.sepalW), 9, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.strokeStyle = '#8B5CF6';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(toScreenX(5.0), toScreenY(2.2));
+                ctx.lineTo(toScreenX(6.8), toScreenY(3.1));
+                ctx.stroke();
+
+                // Labels
+                ctx.fillStyle = '#10B981';
+                ctx.font = 'bold 20px Noto Sans KR';
+                ctx.fillText('Setosa 양의 비례선 (r ≈ +0.74)', toScreenX(4.5), toScreenY(3.95));
+
+                ctx.fillStyle = '#8B5CF6';
+                ctx.fillText('Versicolor 양의 비례선 (r ≈ +0.53)', toScreenX(5.1), toScreenY(2.15));
+            }
+        }
+
+
+        // --- DYNAMIC HEATMAP GENERATOR ---
+        let currentHeatmapType = 'overall';
+        const featureLabels = ["꽃받침 길이", "꽃받침 너비", "꽃잎 길이", "꽃잎 너비"];
+
+        function switchHeatmap(type) {
+            currentHeatmapType = type;
+            // Activate button styles
+            const buttons = ['overall', 'setosa', 'versicolor', 'virginica'];
+            buttons.forEach(btn => {
+                const el = document.getElementById(`heatmap-btn-${btn}`);
+                if (btn === type) {
+                    el.className = "py-1.5 rounded-lg transition-all bg-white text-purple-700 shadow-sm";
+                } else {
+                    el.className = "py-1.5 rounded-lg transition-all text-purple-400";
+                }
+            });
+
+            // Re-render cells list
+            const container = document.getElementById('heatmap-cells-container');
+            container.innerHTML = "";
+
+            const hData = pdfData.heatmaps[type];
+
+            for (let r = 0; r < 4; r++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = "grid grid-cols-5 text-center items-center text-xs gap-1.5";
+
+                // Label
+                const labelDiv = document.createElement('div');
+                labelDiv.className = "text-[10px] font-bold text-left text-slate-500";
+                labelDiv.innerText = featureLabels[r];
+                rowDiv.appendChild(labelDiv);
+
+                for (let c = 0; c < 4; c++) {
+                    const val = hData.matrix[r][c];
+                    const desc = hData.descs[r][c];
+                    
+                    const cellBtn = document.createElement('div');
+                    
+                    // Determine beautiful pastel shade depending on value
+                    let styleBg = "bg-purple-100 text-purple-800 border-purple-200";
+                    if (val === 1.0) {
+                        styleBg = "bg-purple-600 text-white border-purple-700";
+                    } else if (val > 0.7) {
+                        styleBg = "bg-purple-400 text-white border-purple-500";
+                    } else if (val > 0.4) {
+                        styleBg = "bg-purple-200 text-purple-900 border-purple-300";
+                    } else if (val > 0) {
+                        styleBg = "bg-purple-50 text-purple-900 border-purple-100";
+                    } else if (val < -0.3) {
+                        styleBg = "bg-rose-100 text-rose-800 border-rose-200";
+                    } else if (val < 0) {
+                        styleBg = "bg-slate-100 text-slate-800 border-slate-200";
+                    }
+
+                    cellBtn.className = `${styleBg} p-2.5 rounded-xl cursor-pointer hover:scale-105 transition-transform duration-200 font-black border text-center`;
+                    cellBtn.innerText = val.toFixed(2);
+                    
+                    // Add click event to update detail card
+                    cellBtn.onclick = () => {
+                        document.getElementById('heatmap-cell-title').innerText = `💡 ${featureLabels[r]} vs ${featureLabels[c]}`;
+                        document.getElementById('heatmap-cell-val').innerText = `r ≈ ${val.toFixed(2)}`;
+                        document.getElementById('heatmap-cell-desc').innerText = desc;
+                    };
+
+                    rowDiv.appendChild(cellBtn);
+                }
+                container.appendChild(rowDiv);
+            }
+        }
+
+
+        // --- WINDOW EVENTS & INITIALIZERS ---
+        window.addEventListener('resize', () => {
+            const activeTab = document.querySelector('.tab-content:not(.hidden)').id;
+            if (activeTab === 'tab-story') {
+                drawStoryCharts();
+            } else if (activeTab === 'tab-classifier') {
+                drawScatterPlot();
+            } else if (activeTab === 'tab-data') {
+                drawSimpsonPlot(currentSimpsonMode);
+            }
+        });
+
+        window.onload = function() {
+            // Pre-draw current default story tab charts
+            drawStoryCharts();
+        }
+    </script>
+</body>
+</html>
